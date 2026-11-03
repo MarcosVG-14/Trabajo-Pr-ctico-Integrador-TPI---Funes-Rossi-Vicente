@@ -1,7 +1,8 @@
+from abc import ABC
 from datetime import datetime
 from typing import Optional
 
-class Base:
+class Base(ABC):
     def __init__(self, id:int, eliminado:bool, created_at:datetime) -> None:
         self.__id = id
         self.__eliminado = eliminado
