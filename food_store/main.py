@@ -40,7 +40,9 @@ while True:
             for i in categorias:
                 print(f"{i.nombre}: {i.descripcion}")
         case 3 | "3" | "tres" | "iii" | "editar":
-            pass
+            nombre = input_str("Escriba el nombre de la categoria que desea buscar: ","Nombre")
+            catego = buscar_categoria(nombre, categorias)
+            # aplicacion_de_datos(catego)
         case 4 | "4" | "cuatro" | "iv" | "eliminar":
             pass
         case 0 | "0" | "cero" | "o" | "zero" | "volver":
