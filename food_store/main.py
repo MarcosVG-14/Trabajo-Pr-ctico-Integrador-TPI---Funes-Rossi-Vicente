@@ -12,6 +12,15 @@ from entidades.categoria import Categoria
 # 0. Volver
 # Seleccione:
 
+admin = Usuario(
+    nombre="Ana",
+    apellido="Pérez",
+    mail="admin@foodstore.com",
+    celular="261111222",
+    contrasenia="admin123",
+    rol=Rol.ADMIN
+)
+
 categorias = []
 categoria1 = Categoria("Nombre de categoria", "Descripcion de categoria")
 categorias.append(categoria1)
@@ -21,6 +30,8 @@ detalle_pedido1 = DetallePedido()
 detalle_pedido1.agregar_producto(producto1)
 detalle_pedido1.agregar_producto(producto2)
 pedido1 = Pedido(detalle_pedido1)
+
+print(usuario.rol.value)
 
 while True:
     print("""
