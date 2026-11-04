@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 class Base(ABC):
-    _contador_id: int = 1
+    _contador_id: int = 0
 
     def __init__(self) -> None:
         self._id: int = Base._contador_id

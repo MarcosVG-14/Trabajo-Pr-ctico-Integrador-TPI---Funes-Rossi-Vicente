@@ -2,8 +2,8 @@ from datetime import datetime
 from .base import Base
 
 class Categoria(Base):
-    def __init__(self, nombre, descripcion, id, eliminado, created_at):
-        super().__init__(id, eliminado, created_at)
+    def __init__(self, nombre, descripcion):
+        super().__init__()
         self.nombre: str = nombre
         self.descripcion: str = descripcion
 

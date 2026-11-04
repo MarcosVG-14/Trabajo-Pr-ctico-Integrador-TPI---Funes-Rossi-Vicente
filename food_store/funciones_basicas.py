@@ -2,6 +2,7 @@ from entidades.pedido import Pedido
 from entidades.detalle_pedido import DetallePedido
 from entidades.producto import Producto
 from entidades.categoria import Categoria
+from servicios.categoriaservicio import Categoriaservicio
 
 def input_seleccion(mensaje):
     while True:
@@ -26,23 +27,22 @@ def input_str(mensaje, que_es):
             raise ValueError(f"{que_es} no puede estar vacio")
         return input_salid.capitalize()
 
-def listar(pedido):
+def listar(categoriaservicio):
     encontrado = False
-    for i in pedido.detalle_pedido.productos:
-        if i.categoria:
+    for i in categoriaservicio.categorias:
+        if i:
             encontrado = True
-            print(f"El producto {i.nombre} posee la siguiente categoria: {i.categoria.nombre}: {i.categoria.descripcion}")
+            print(f"ID: {i.id} | {i.nombre}: {i.descripcion}")
     if not encontrado:
         raise KeyError("No hay categorias cargadas.")
 
-
-def crear_categoria(nombre, descripcion, lista):
+def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
-    lista.append(categoria)
+    categoriaservicio.agregar_categoria(categoria)
 
-def editar_categoria(nombre, categorias, pedido):
+def editar_categoria(nombre, categoriaservicio, pedido): # CORREGIR
     encontrado = False
-    for i in categorias:
+    for i in categoriaservicio.categorias:
         if nombre.capitalize() == i.nombre:
             encontrado = True
             print("Se encontro una categoria con ese nombre")
@@ -53,10 +53,9 @@ def editar_categoria(nombre, categorias, pedido):
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
         for f in pedido.detalle_pedido.productos:
-            if f.categorias:
-                for h in f.categorias:
-                    if f.nombre == nombre_viejo:
-                        f = i
+            if f.categoria:
+                if f.nombre == nombre_viejo:
+                    f = i
             # return i
     if encontrado:
         print("¡Categoria editada!")

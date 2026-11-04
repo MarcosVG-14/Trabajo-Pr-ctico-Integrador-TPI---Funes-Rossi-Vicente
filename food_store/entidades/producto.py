@@ -16,4 +16,4 @@ class Producto(Base):
         self.categoria = None
     
     def agregar_categoria(self, categoria):
-        self.categorias.append(categoria) 
+        self.categoria = categoria
