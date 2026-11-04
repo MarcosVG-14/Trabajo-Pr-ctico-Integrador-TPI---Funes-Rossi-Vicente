@@ -27,6 +27,15 @@ def input_str(mensaje, que_es):
             raise ValueError(f"{que_es} no puede estar vacio")
         return input_salid.capitalize()
 
+def input_int(mensaje, que_es):
+    while True:
+        input_salid = int(input(mensaje))
+        if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
+            raise TypeError(f"{que_es} debe de ser un valor numerico.")
+        if 0 > input_salid:
+            raise ValueError("{que_es} no puede ser menor a cero. ")
+        return input_salid
+
 def listar(categoriaservicio):
     encontrado = False
     for i in categoriaservicio.categorias:
@@ -40,10 +49,10 @@ def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
     categoriaservicio.agregar_categoria(categoria)
 
-def editar_categoria(nombre, categoriaservicio, pedido):
+def editar_categoria(_id, categoriaservicio, pedido):
     encontrado = False
     for i in categoriaservicio.categorias:
-        if nombre.capitalize() == i.nombre:
+        if _id == i.id:
             encontrado = True
             print("Se encontro una categoria con ese nombre")
             nombre_nuevo = input_str("Escriba el nuevo nombre de la categoria: ", "Nombre")
@@ -59,7 +68,7 @@ def editar_categoria(nombre, categoriaservicio, pedido):
     if encontrado:
         print("¡Categoria editada!")
     if not encontrado:
-        raise KeyError("No se encontro ninguna categoria con ese nombre")
+        raise KeyError("No se encontro ninguna categoria con ese ID")
 
 # def aplicacion_de_datos(catego, pedido):
 #     for i in pedido.detalle_pedido.productos:
