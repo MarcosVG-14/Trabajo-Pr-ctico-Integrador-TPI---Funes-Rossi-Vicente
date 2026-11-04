@@ -29,20 +29,20 @@ def input_str(mensaje, que_es):
 def listar(pedido):
     for i in pedido.detalle_pedido.productos:
         if i.categorias:
-            if len(i.categorias) > 1:
-                print(f"El producto {i.nombre} posee las siguientes categorias:")
-                for f in i.categorias:
-                    print(f"{f.nombre}: {f.descripcion}")
-            else:
-                print(f"El producto {i.nombre} posee las siguiente categoria: {i.categoria.nombre}: {i.categoria.descripcion}")
+            # if len(i.categorias) > 1:
+            print(f"El producto {i.nombre} posee las siguientes categorias:")
+            for f in i.categorias:
+                print(f"{f.nombre}: {f.descripcion}")
+            # else:
+            #     print(f"El producto {i.nombre} posee las siguiente categoria: {i.categoria.nombre}: {i.categoria.descripcion}")
         else:
-            print("Un producto listado no posee categoria.")
+            print(f"El producto {i.nombre} no posee categoria.")
 
 def crear_categoria(nombre, descripcion, lista):
     categoria = Categoria(nombre, descripcion)
     lista.append(categoria)
 
-def buscar_categoria(nombre, categorias):
+def editar_categoria(nombre, categorias, pedido):
     encontrado = False
     for i in categorias:
         if nombre.capitalize() == i.nombre:
@@ -50,10 +50,18 @@ def buscar_categoria(nombre, categorias):
             print("Se encontro una categoria con ese nombre")
             nombre_nuevo = input_str("Escriba el nuevo nombre de la categoria: ", "Nombre")
             descripcion_nueva = input_str("Escriba la nueva descripción de la categoria: ", "Descripción")
+            nombre_viejo = i.nombre
+            descripcion_vieja = i.descripcion
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
-            print("¡Categoria editada!")
-            return i
+        for f in pedido.detalle_pedido.productos:
+            if f.categorias:
+                for h in f.categorias:
+                    if f.nombre == nombre_viejo:
+                        f = i
+            # return i
+    if encontrado:
+        print("¡Categoria editada!")
     if not encontrado:
         raise KeyError("No se encontro ninguna categoria con ese nombre")
 

@@ -4,6 +4,7 @@ from entidades.detalle_pedido import DetallePedido
 from entidades.producto import Producto
 from entidades.categoria import Categoria
 from entidades.usuario import Usuario
+from enums import FormaPago, Rol, Estado
 
 # --- CATEGORÍAS ---
 # 1. Listar
@@ -25,17 +26,18 @@ admin = Usuario(
 categorias = []
 categoria1 = Categoria("Nombre de categoria", "Descripcion de categoria")
 categorias.append(categoria1)
-producto1 = Producto(categoria1)
-producto2 = Producto(None)
+producto1 = Producto("Mesa", categoria1)
+producto2 = Producto("Silla", None)
+producto1.agregar_categoria(categoria1)
 detalle_pedido1 = DetallePedido()
 detalle_pedido1.agregar_producto(producto1)
 detalle_pedido1.agregar_producto(producto2)
 pedido1 = Pedido(detalle_pedido1)
 
-print(usuario.rol.value)
+# print(admin.rol.value)
 
 while True:
-    print("""
+    print("""--- CATEGORÍAS ---
 1. Listar
 2. Crear
 3. Editar
@@ -53,8 +55,7 @@ while True:
                 print(f"{i.nombre}: {i.descripcion}")
         case 3 | "3" | "tres" | "iii" | "editar":
             nombre = input_str("Escriba el nombre de la categoria que desea buscar: ","Nombre")
-            catego = buscar_categoria(nombre, categorias)
-            # aplicacion_de_datos(catego)
+            editar_categoria(nombre, categorias, pedido1)
         case 4 | "4" | "cuatro" | "iv" | "eliminar":
             pass
         case 0 | "0" | "cero" | "o" | "zero" | "volver":

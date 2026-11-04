@@ -6,12 +6,13 @@ class Producto(Base):
     #     super().__init__(id, eliminado, created_at)
     #     self.__nombre = nombre
     #     self.__precio = precio
-    #     self.__descripcion = descripcion
+        # self.__descripcion = descripcion
     #     self.__stock = stock
     #     self.__imagen = imagen
     #     self.__disponible = disponible
 
-    def __init__(self, categoria:None):
+    def __init__(self,nombre ,categoria:None):
+        self.nombre: str = nombre
         self.categorias = []
     
     def agregar_categoria(self, categoria):
