@@ -40,7 +40,7 @@ def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
     categoriaservicio.agregar_categoria(categoria)
 
-def editar_categoria(nombre, categoriaservicio, pedido): # CORREGIR
+def editar_categoria(nombre, categoriaservicio, pedido):
     encontrado = False
     for i in categoriaservicio.categorias:
         if nombre.capitalize() == i.nombre:
@@ -52,11 +52,10 @@ def editar_categoria(nombre, categoriaservicio, pedido): # CORREGIR
             descripcion_vieja = i.descripcion
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
-        for f in pedido.detalle_pedido.productos:
-            if f.categoria:
-                if f.nombre == nombre_viejo:
-                    f = i
-            # return i
+            for f in pedido.detalle_pedido.productos:
+                if f.categoria:
+                    if f.nombre == nombre_viejo:
+                        f = i
     if encontrado:
         print("¡Categoria editada!")
     if not encontrado:
