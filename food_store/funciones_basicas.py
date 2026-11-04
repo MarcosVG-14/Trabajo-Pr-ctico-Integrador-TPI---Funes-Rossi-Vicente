@@ -54,11 +54,10 @@ def editar_categoria(_id, categoriaservicio, pedido):
     for i in categoriaservicio.categorias:
         if _id == i.id:
             encontrado = True
-            print("Se encontro una categoria con ese nombre")
+            print("Se encontro la categoria con ese ID")
             nombre_nuevo = input_str("Escriba el nuevo nombre de la categoria: ", "Nombre")
             descripcion_nueva = input_str("Escriba la nueva descripción de la categoria: ", "Descripción")
             nombre_viejo = i.nombre
-            descripcion_vieja = i.descripcion
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
             for f in pedido.detalle_pedido.productos:
@@ -77,4 +76,26 @@ def editar_categoria(_id, categoriaservicio, pedido):
 #                 if f.nombre == catego.nombre:
 #                     f = catego
 
-# def eliminar_categoria():
+def eliminar_categoria(_id, categoriaservicio, pedido):
+    encontrado = False
+    for i in categoriaservicio.categorias:
+        if _id == i.id:
+            encontrado = True
+            print("Se encontro la categoria con ese ID")
+            while True:
+                opcion = input("¿Usted esta seguro de eliminar esta categoria?(S/N): ")
+                match opcion:
+                    case "S" | "s":
+                        id_viejo = i.id
+                        categoriaservicio.categorias.remove(i)
+                        for f in pedido.detalle_pedido.productos:
+                            if f.categoria:
+                                if f.id == id_viejo:
+                                    f = None
+                        print("Eliminacion completada.")
+                        break
+                    case "N" | "n":
+                        print("Se cancelo la eliminacion, regresando...")
+                        break
+    if not encontrado:
+        raise KeyError("No se encontro ninguna categoria con ese ID")

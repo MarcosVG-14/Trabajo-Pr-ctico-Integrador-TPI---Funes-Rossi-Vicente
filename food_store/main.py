@@ -75,7 +75,11 @@ while True:
             else:
                 print("Usted no tiene los permisos necesarios para realizar esta opcion.")
         case 4 | "4" | "cuatro" | "iv" | "eliminar":
-            pass
+            if sesion_activa.rol.value == "Admin":
+                _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
+                eliminar_categoria(_id, categoriaservicio1, pedido1)
+            else:
+                print("Usted no tiene los permisos necesarios para realizar esta opcion.")
         case 0 | "0" | "cero" | "o" | "zero" | "volver":
             print("Regresando...")
             break

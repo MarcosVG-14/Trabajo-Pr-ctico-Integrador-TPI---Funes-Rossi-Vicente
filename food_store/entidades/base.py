@@ -32,4 +32,4 @@ class Base(ABC):
     def __eq__(self, otro: Base | int) -> bool:
         if isinstance(otro, Base):
             return self._id == otro._id
-        return self.id == otro
+        return self._id == otro
