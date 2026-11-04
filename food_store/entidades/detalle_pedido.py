@@ -1,5 +1,5 @@
 from datetime import datetime
-from base import Base
+from .base import Base
 
 class DetallePedido(Base):
     def __init__(self):

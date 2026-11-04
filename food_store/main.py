@@ -1,8 +1,9 @@
 from funciones_basicas import *
 from entidades.pedido import Pedido
-from entidades.detallepedido import DetallePedido
+from entidades.detalle_pedido import DetallePedido
 from entidades.producto import Producto
 from entidades.categoria import Categoria
+from entidades.usuario import Usuario
 
 # --- CATEGORÍAS ---
 # 1. Listar

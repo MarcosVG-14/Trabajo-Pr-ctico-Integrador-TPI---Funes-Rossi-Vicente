@@ -1,5 +1,5 @@
 from datetime import datetime
-from base import Base
+from .base import Base
 from enums import Rol
 
 class Usuario(Base):
