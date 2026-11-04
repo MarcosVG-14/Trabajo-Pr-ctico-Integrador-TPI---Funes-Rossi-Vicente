@@ -13,7 +13,7 @@ class Producto(Base):
 
     def __init__(self,nombre ,categoria:None):
         self.nombre: str = nombre
-        self.categorias = []
+        self.categoria = None
     
     def agregar_categoria(self, categoria):
         self.categorias.append(categoria) 

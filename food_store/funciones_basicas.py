@@ -27,16 +27,14 @@ def input_str(mensaje, que_es):
         return input_salid.capitalize()
 
 def listar(pedido):
+    encontrado = False
     for i in pedido.detalle_pedido.productos:
-        if i.categorias:
-            # if len(i.categorias) > 1:
-            print(f"El producto {i.nombre} posee las siguientes categorias:")
-            for f in i.categorias:
-                print(f"{f.nombre}: {f.descripcion}")
-            # else:
-            #     print(f"El producto {i.nombre} posee las siguiente categoria: {i.categoria.nombre}: {i.categoria.descripcion}")
-        else:
-            print(f"El producto {i.nombre} no posee categoria.")
+        if i.categoria:
+            encontrado = True
+            print(f"El producto {i.nombre} posee la siguiente categoria: {i.categoria.nombre}: {i.categoria.descripcion}")
+    if not encontrado:
+        raise KeyError("No hay categorias cargadas.")
+
 
 def crear_categoria(nombre, descripcion, lista):
     categoria = Categoria(nombre, descripcion)
@@ -71,3 +69,5 @@ def editar_categoria(nombre, categorias, pedido):
 #             for f in i.categorias:
 #                 if f.nombre == catego.nombre:
 #                     f = catego
+
+# def eliminar_categoria():
