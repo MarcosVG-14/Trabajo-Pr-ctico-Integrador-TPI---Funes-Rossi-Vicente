@@ -71,7 +71,7 @@ class Usuario(Base):
     
     def verificar_contrasenia(self, contrasenia_ingresada: str) -> bool:
         """Verifica la contraseña sin exponerla hacia el exterior del objeto."""
-        return self._contrasenia == contrasenia_ingresada
+        return self.__contrasenia == contrasenia_ingresada
     
     def actualizar_contrasenia(self, nueva_contrasenia: str) -> None:
         """Método seguro para actualizar la contraseña."""
