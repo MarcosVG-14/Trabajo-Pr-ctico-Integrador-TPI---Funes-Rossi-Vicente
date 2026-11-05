@@ -1,7 +1,7 @@
 from datetime import datetime
 from .base import Base
 from enums import Rol
-# from excepciones import DatoInvalidoError
+from excepciones.excepciones import DatoInvalidoError
 
 class Usuario(Base):
     def __init__(self, nombre: str, apellido: str, mail: str, celular: str, contrasenia: str, rol: Rol) -> None:

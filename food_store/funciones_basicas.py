@@ -3,6 +3,8 @@ from entidades.detalle_pedido import DetallePedido
 from entidades.producto import Producto
 from entidades.categoria import Categoria
 from servicios.categoriaservicio import Categoriaservicio
+from datetime import datetime
+
 
 def input_seleccion(mensaje):
     while True:
@@ -29,7 +31,10 @@ def input_str(mensaje, que_es):
 
 def input_int(mensaje, que_es):
     while True:
-        input_salid = int(input(mensaje))
+        try:
+            input_salid = int(input(mensaje))
+        except:
+            raise TypeError(f"{que_es} debe de ser un valor numerico.")
         if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
             raise TypeError(f"{que_es} debe de ser un valor numerico.")
         if 0 > input_salid:
@@ -60,10 +65,10 @@ def editar_categoria(_id, categoriaservicio, pedido):
             nombre_viejo = i.nombre
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
-            for f in pedido.detalle_pedido.productos:
-                if f.categoria:
-                    if f.nombre == nombre_viejo:
-                        f = i
+            for f in pedido.detalles:
+                if f.producto and f.producto.categoria:
+                    if f.producto.categoria.nombre == nombre_viejo:
+                        f.producto.categoria = i
     if encontrado:
         print("¡Categoria editada!")
     if not encontrado:
@@ -88,10 +93,10 @@ def eliminar_categoria(_id, categoriaservicio, pedido):
                     case "S" | "s":
                         id_viejo = i.id
                         categoriaservicio.categorias.remove(i)
-                        for f in pedido.detalle_pedido.productos:
-                            if f.categoria:
-                                if f.id == id_viejo:
-                                    f = None
+                        for f in pedido.detalles:
+                            if f.producto and f.producto.categoria:
+                                if f.producto.categoria.id == id_viejo:
+                                    f.producto.categoria = None
                         print("Eliminacion completada.")
                         break
                     case "N" | "n":

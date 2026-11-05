@@ -2,8 +2,8 @@ from datetime import datetime
 from .base import Base
 
 class Producto(Base):
-    def __init__(self, id: int, eliminado: bool, created_at: datetime, nombre: str, precio: float, descripcion: str, stock: int, imagen: str, disponible: bool) -> None:
-        super().__init__(id, eliminado, created_at)
+    def __init__(self, nombre: str, precio: float, descripcion: str, stock: int, imagen: str, disponible: bool) -> None:
+        super().__init__()
         self.__nombre = nombre
         self.__precio = precio
         self.__descripcion = descripcion

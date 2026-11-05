@@ -5,8 +5,8 @@ from enums import Estado, FormaPago
 
 
 class Pedido(Base):
-    def __init__(self, id: int, eliminado: bool, created_at: datetime, fecha: datetime, estado: Estado, total: float, forma_pago: FormasPago) -> None:
-        super().__init__(id, eliminado, created_at)
+    def __init__(self, fecha: datetime, estado: Estado, total: float, forma_pago: FormasPago) -> None:
+        super().__init__()
         self.__fecha = fecha
         self.__estado = estado
         self.__total = total

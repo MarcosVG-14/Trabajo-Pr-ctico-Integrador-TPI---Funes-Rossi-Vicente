@@ -34,15 +34,15 @@ normal = Usuario(
     rol=Rol.USUARIO
 )
 
-categoria1 = Categoria(1, False, datetime, "Nombre de categoria", "Descripcion de categoria")
-producto1 = Producto(1, False, datetime, "Mesa", 55000.5, "Madera de roble, 4 patas.", 5, "De frente", True)
-producto1 = Producto(2, False, datetime, "Silla", 35000.5, "Madera de roble, 4 patas.", 9, "De frente", True)
+categoria1 = Categoria("Nombre de categoria", "Descripcion de categoria")
+producto1 = Producto("Mesa", 55000.5, "Madera de roble, 4 patas.", 5, "De frente", True)
+producto1 = Producto("Silla", 35000.5, "Madera de roble, 4 patas.", 9, "De frente", True)
 categoriaservicio1 = Categoriaservicio()
 producto1.agregar_categoria(categoria1)
 categoriaservicio1.agregar_categoria(categoria1)
-detalle_pedido1 = DetallePedido(1, False, datetime, 30, 300.2, None)
+detalle_pedido1 = DetallePedido(30, 300.2, None)
 detalle_pedido1.agregar_producto(producto1)
-pedido1 = Pedido(1, False, datetime.time, datetime.date, Estado.PENDIENTE, 90000.2, FormasPago.EFECTIVO)
+pedido1 = Pedido(datetime.date, Estado.PENDIENTE, 90000.2, FormaPago.EFECTIVO)
 pedido1.agregar_producto(detalle_pedido1)
 
 sesion_activa = admin
