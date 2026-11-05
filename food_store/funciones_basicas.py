@@ -4,29 +4,29 @@ from entidades.producto import Producto
 from entidades.categoria import Categoria
 from servicios.categoriaservicio import Categoriaservicio
 from datetime import datetime
-
+from excepciones.excepciones import EntidadNoEncontradaError, DatoInvalidoError
 
 def input_seleccion(mensaje):
     while True:
         input_salid = input(mensaje)
         if isinstance(input_salid, str):
             if not input_salid.strip():
-                raise ValueError("La seleccion no puede estar vacía.")
+                raise DatoInvalidoError("La seleccion no puede estar vacía.")
             return input_salid.lower()
         elif (isinstance(input_salid, int) or isinstance(input_salid, float)):
             if not 0 > input_salid:
-                raise ValueError("La seleccion no puede ser menor a cero")
+                raise DatoInvalidoError("La seleccion no puede ser menor a cero")
             return input_salid
         else:
-            raise TypeError("Escriba una opcion mostrada en pantalla")
+            raise DatoInvalidoError("Escriba una opcion mostrada en pantalla")
 
 def input_str(mensaje, que_es):
     while True:
         input_salid = input(mensaje)
         if not isinstance(input_salid, str):
-            raise TypeError(f"{que_es} debe de ser una cadena de texto")
+            raise DatoInvalidoError(f"{que_es} debe de ser una cadena de texto")
         if not input_salid.strip():
-            raise ValueError(f"{que_es} no puede estar vacio")
+            raise DatoInvalidoError(f"{que_es} no puede estar vacio")
         return input_salid.capitalize()
 
 def input_int(mensaje, que_es):
@@ -34,11 +34,11 @@ def input_int(mensaje, que_es):
         try:
             input_salid = int(input(mensaje))
         except:
-            raise TypeError(f"{que_es} debe de ser un valor numerico.")
+            raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
         if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
-            raise TypeError(f"{que_es} debe de ser un valor numerico.")
+            raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
         if 0 > input_salid:
-            raise ValueError("{que_es} no puede ser menor a cero. ")
+            raise DatoInvalidoError("{que_es} no puede ser menor a cero. ")
         return input_salid
 
 def listar(categoriaservicio):
@@ -48,7 +48,7 @@ def listar(categoriaservicio):
             encontrado = True
             print(f"ID: {i.id} | {i.nombre}: {i.descripcion}")
     if not encontrado:
-        raise KeyError("No hay categorias cargadas.")
+        raise EntidadNoEncontradaError("No hay categorias cargadas.")
 
 def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
@@ -72,14 +72,7 @@ def editar_categoria(_id, categoriaservicio, pedido):
     if encontrado:
         print("¡Categoria editada!")
     if not encontrado:
-        raise KeyError("No se encontro ninguna categoria con ese ID")
-
-# def aplicacion_de_datos(catego, pedido):
-#     for i in pedido.detalle_pedido.productos:
-#         if i.categorias:
-#             for f in i.categorias:
-#                 if f.nombre == catego.nombre:
-#                     f = catego
+        raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
 
 def eliminar_categoria(_id, categoriaservicio, pedido):
     encontrado = False
@@ -103,4 +96,4 @@ def eliminar_categoria(_id, categoriaservicio, pedido):
                         print("Se cancelo la eliminacion, regresando...")
                         break
     if not encontrado:
-        raise KeyError("No se encontro ninguna categoria con ese ID")
+        raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")

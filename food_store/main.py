@@ -47,7 +47,6 @@ pedido1.agregar_producto(detalle_pedido1)
 
 sesion_activa = admin
 sesion_activa.rol.value
-# print(admin.rol.value)
 
 while True:
     print("""--- CATEGORÍAS ---
