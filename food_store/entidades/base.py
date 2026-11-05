@@ -5,7 +5,7 @@ from typing import Optional
 class Base(ABC):
     _contador_id: int = -1
 
-    def __init__(self) -> None:
+    def __init__(self, id: int, eliminado: bool, created_at: datetime) -> None:
         self._id: int = Base._contador_id
         Base._contador_id += 1
         self._eliminado: bool = False
