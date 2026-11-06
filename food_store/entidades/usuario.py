@@ -1,5 +1,5 @@
 from datetime import datetime
-from entidades.base import Base
+from .base import Base
 from enums.enums import Rol
 from excepciones.excepciones import DatoInvalidoError
 
