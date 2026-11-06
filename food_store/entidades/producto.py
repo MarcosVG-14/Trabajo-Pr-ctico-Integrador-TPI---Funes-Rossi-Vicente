@@ -10,7 +10,15 @@ class Producto(Base):
         self.__stock = stock
         self.__imagen = imagen
         self.__disponible = disponible
-        self.categoria = None
-    
+        self.__categoria = None
+
+    @property
+    def categoria(self):
+        return self.__categoria
+
+    @categoria.setter
+    def categoria(self, categoria) -> categoria:
+        self.__categoria = categoria
+
     def agregar_categoria(self, categoria):
         self.categoria = categoria
