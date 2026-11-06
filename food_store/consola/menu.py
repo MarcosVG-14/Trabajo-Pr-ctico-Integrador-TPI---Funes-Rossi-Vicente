@@ -1,7 +1,7 @@
 
 from abc import ABC, abstractmethod
-from usuario import Usuario
-from enums import Rol
+from entidades.usuario import Usuario
+from enums.enums import Rol
 
 class Menu(ABC):
     def __init__(self, usuario: Usuario) -> None:

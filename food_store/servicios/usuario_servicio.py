@@ -1,6 +1,6 @@
 
-from usuario import Usuario
-from excepciones import CredencialesInvalidasError
+from entidades.usuario import Usuario
+from excepciones.excepciones import CredencialesInvalidasError
 
 class UsuarioServicio:
     def __init__(self) -> None:

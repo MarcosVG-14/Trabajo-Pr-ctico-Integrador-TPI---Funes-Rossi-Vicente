@@ -1,5 +1,5 @@
 from datetime import datetime
-from base import Base
+from entidades.base import Base
 
 class Categoria(Base):
     def __init__(self, id: int, eliminado: bool, created_at: datetime, nombre: str, descripcion: str) -> None:
