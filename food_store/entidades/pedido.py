@@ -1,7 +1,7 @@
 from .base import Base
 from datetime import datetime
 from typing import List
-from enums import Estado, FormaPago
+from enums.enums import Estado, FormaPago
 
 
 class Pedido(Base):

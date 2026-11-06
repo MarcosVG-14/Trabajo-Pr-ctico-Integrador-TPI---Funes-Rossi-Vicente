@@ -4,7 +4,7 @@ from entidades.detalle_pedido import DetallePedido
 from entidades.producto import Producto
 from entidades.categoria import Categoria
 from entidades.usuario import Usuario
-from enums import FormaPago, Rol, Estado
+from enums.enums import FormaPago, Rol, Estado
 from servicios.categoriaservicio import Categoriaservicio
 from datetime import datetime
 

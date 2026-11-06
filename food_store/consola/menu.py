@@ -1,8 +1,8 @@
 
 from abc import ABC, abstractmethod
-from usuario import Usuario
+from entidades.usuario import Usuario
 from servicios.categoriaservicio import *
-from enums import FormaPago, Rol, Estado
+from enums.enums import FormaPago, Rol, Estado
 from servicios.categoriaservicio import Categoriaservicio
 from datetime import datetime
 

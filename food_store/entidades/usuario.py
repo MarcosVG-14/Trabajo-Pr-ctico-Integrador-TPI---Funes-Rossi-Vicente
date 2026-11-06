@@ -1,6 +1,6 @@
 from datetime import datetime
 from .base import Base
-from enums import Rol
+from enums.enums import Rol
 from excepciones.excepciones import DatoInvalidoError
 
 class Usuario(Base):
