@@ -1,7 +1,6 @@
 
 from abc import ABC, abstractmethod
 from usuario import Usuario
-from enums import Rol
 from servicios.categoriaservicio import *
 from enums import FormaPago, Rol, Estado
 from servicios.categoriaservicio import Categoriaservicio
