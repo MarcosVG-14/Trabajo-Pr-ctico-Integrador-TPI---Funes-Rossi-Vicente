@@ -55,7 +55,7 @@ class MenuAdministrador(Menu):
                     match seleccion:
                         case 1 | "1" | "uno" | "i" | "listar":
                             if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
-                                listar(categoriaservicio1)
+                                listar_categoria(categoriaservicio1)
                         case 2 | "2" | "dos" | "ii" | "crear":
                             if sesion_activa.rol.value == "Admin":
                                 nombre = input_str("Escriba el nombre de la categoria: ", "Nombre")
@@ -109,7 +109,7 @@ class MenuCliente(Menu):
                     match seleccion:
                         case 1 | "1" | "uno" | "i" | "listar":
                             if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
-                                listar(categoriaservicio1)
+                                listar_categoria(categoriaservicio1)
                         case 0 | "0" | "cero" | "o" | "zero" | "volver":
                             print("Regresando...")
                             break
