@@ -69,7 +69,7 @@ def listar(categoriaservicio):
     if not encontrado:
         raise EntidadNoEncontradaError("No hay categorias cargadas.")
 
-def crear_categoria(nombre, descripcion, categoriaservicio):
+def crear_categoria(nombre:str, descripcion:str, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
     categoriaservicio.agregar_categoria(categoria)
 
