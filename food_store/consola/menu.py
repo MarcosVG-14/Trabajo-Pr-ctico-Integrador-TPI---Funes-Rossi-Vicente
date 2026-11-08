@@ -36,13 +36,8 @@ class MenuAdministrador(Menu):
         opcion = input("Seleccione una opción: ").strip()
         
         match opcion:
-            case "9":
-                return False
             case "0":
                 return "Saliendo del menú..."
-            case _:
-                print("Opción no válida.")
-                return True
             case "1":
                 while True:
                     print("""--- CATEGORÍAS ---
@@ -204,6 +199,13 @@ Rol: {usuario.rol.name}
                             print("Regresando...")
                             break
 
+            case "9":
+                return False
+
+            case _:
+                print("Opción no válida.")
+                return True
+
 
 class MenuCliente(Menu):
     def mostrar(self) -> bool:
@@ -218,14 +220,9 @@ class MenuCliente(Menu):
         opcion = input("Seleccione una opción: ").strip()
         
         match opcion:
-            case "9":
-                print("Cerrando sesión de cliente...")
-                return False
             case "0":
                 return "salir"
-            case _:
-                print("Opción no válida.")
-                return True
+
             case "1":
                 while True:
                     print("""--- CATEGORÍAS ---
@@ -240,6 +237,13 @@ class MenuCliente(Menu):
                             print("Regresando...")
                             break
 
+            case "9":
+                print("Cerrando sesión de cliente...")
+                return False
+
+            case _:
+                print("Opción no válida.")
+                return True
 
 def crear_menu(usuario: Usuario) -> Menu:
     """instancia el menú correcto según el rol de forma polimórfica."""

@@ -57,7 +57,7 @@ def input_int(mensaje, que_es):
         if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
             raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
         if 0 > input_salid:
-            raise DatoInvalidoError("{que_es} no puede ser menor a cero. ")
+            raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
         return input_salid
 
 def listar(categoriaservicio):
