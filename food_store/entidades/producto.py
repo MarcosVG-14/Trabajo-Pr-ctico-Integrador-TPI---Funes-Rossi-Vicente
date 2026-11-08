@@ -1,5 +1,6 @@
 from datetime import datetime
 from .base import Base
+from .categoria import Categoria
 
 class Producto(Base):
     def __init__(self, nombre: str, precio: float, descripcion: str, stock: int, imagen: str, disponible: bool) -> None:
@@ -56,8 +57,8 @@ class Producto(Base):
     def stock(self, stock) -> None:
         if not (isinstance(stock, int) or isinstance(stock, float)):
             raise DatoInvalidoError("El stock debe de ser un valor numerico.")
-        if 0 > stock:
-            raise DatoInvalidoError("El stock no puede ser menor a cero. ")
+        if not 0 < stock:
+            raise DatoInvalidoError("El stock debe ser mayor que cero.")
         self.__stock = stock
 
     @property
@@ -83,11 +84,12 @@ class Producto(Base):
         self.__categoria = categoria
 
     def agregar_categoria(self, categoria):
-        if categoria.id == self.categoria.id:
-            if (categoria.nombre != self.categoria.nombre) or (categoria.descripcion != self.categoria.descripcion):
-                self.categoria = categoria
-            else:
-                return("Esta categoria ya esta asignada.")
+        if self.categoria:
+            if categoria.id == self.categoria.id:
+                if (categoria.nombre != self.categoria.nombre) or (categoria.descripcion != self.categoria.descripcion):
+                    self.categoria = categoria
+                else:
+                    return("Esta categoria ya esta asignada.")
         else:
             self.categoria = categoria
 

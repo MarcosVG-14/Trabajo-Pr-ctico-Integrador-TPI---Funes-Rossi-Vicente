@@ -26,5 +26,5 @@ class Pedido(Base):
     def __contains__(self, detalle: "Detalle") -> bool:
         return detalle in self._detalles
 
-    def agregar_producto(self, detalle):
+    def agregar_detalle(self, detalle):
         self._detalles.append(detalle)

@@ -23,7 +23,12 @@ class Categoriaservicio:
         return producto in self._categorias
 
     def agregar_categoria(self, categoria):
-        self.categorias.append(categoria) 
+        if self._categorias:
+            for i in self._productos:
+                if i.id == producto.id:
+                    return ("Esta categoria ya esta en la lista.")
+        self.categorias.append(categoria)
+        return ("Se agrego la categoria en la lista.")
 
 def input_seleccion(mensaje):
     while True:
