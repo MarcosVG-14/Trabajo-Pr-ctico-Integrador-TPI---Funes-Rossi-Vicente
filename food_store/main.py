@@ -1,4 +1,3 @@
-# main.py
 
 import getpass
 from entidades.usuario import Usuario

@@ -1,6 +1,6 @@
 from enum import Enum
 
-class FormasPago(Enum):
+class FormaPago(Enum):
     TARJETA = "Tarjeta"
     TRANSFERENCIA = "Tranferencia"
     EFECTIVO = "Efectivo"
