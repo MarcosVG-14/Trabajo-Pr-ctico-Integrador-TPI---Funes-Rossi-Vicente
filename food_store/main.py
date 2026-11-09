@@ -1,11 +1,10 @@
-# main.py
 
 import getpass
-from usuario import Usuario
-from enums import Rol
+from entidades.usuario import Usuario
+from enums.enums import Rol
 from servicios.usuario_servicio import UsuarioServicio
-from excepciones import CredencialesInvalidasError
-from menu import crear_menu
+from excepciones.excepciones import CredencialesInvalidasError
+from consola.menu import crear_menu
 
 def inicializar_datos(usuario_servicio: UsuarioServicio) -> None:
     """Carga los usuarios iniciales requeridos en memoria."""

@@ -67,14 +67,14 @@ class UsuarioServicio:
         )
         self.__usuarios.append(nuevo_usuario)
 
-    def buscar_por_id(self, _id:int) -> Usuario:
-        '''Busca un usuario activo por su ID y lo retorna, o lanza excepción.'''
-        for usuario in self.__usuarios:
-            if usuario.id == _id and not usuario.eliminado:
-                return usuario
-        raise EntidadNoEncontradaError("No se encontró un usuario activo con ese ID.")
+        def buscar_por_id(self, _id:int) -> Usuario:
+            '''Busca un usuario activo por su ID y lo retorna, o lanza excepción.'''
+            for usuario in self.__usuarios:
+                if usuario.id == _id and not usuario.eliminado:
+                    return usuario
+            raise EntidadNoEncontradaError("No se encontró un usuario activo con ese ID.")
 
-    def eliminar_usuario(self, _id:int) -> None:
-        for usuario in self.__usuarios:
-            if usuario.id == _id and not usuario.eliminado:
-                usuario.eliminado = True
+        def eliminar_usuario(self, _id:int) -> None:
+            for usuario in self.__usuarios:
+                if usuario.id == _id and not usuario.eliminado:
+                    usuario.eliminado = True

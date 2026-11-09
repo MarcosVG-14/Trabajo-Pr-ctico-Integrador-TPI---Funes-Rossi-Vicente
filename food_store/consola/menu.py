@@ -49,7 +49,7 @@ class MenuAdministrador(Menu):
                     seleccion = input_seleccion("Seleccione: ")
                     match seleccion:
                         case 1 | "1" | "uno" | "i" | "listar":
-                            if self.usuario.rol in (Rol.ADMIN, Rol.USUARIO):
+                            if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
                                 listar(categoriaservicio1)
                         case 2 | "2" | "dos" | "ii" | "crear":
                             if sesion_activa.rol.value == "Admin":
