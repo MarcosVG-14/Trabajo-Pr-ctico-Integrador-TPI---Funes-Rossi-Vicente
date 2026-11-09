@@ -20,10 +20,10 @@ class Categoriaservicio:
         return iter(self._categorias)
 
     def __contains__(self, categoria: "Categoria") -> bool:
-        return producto in self._categorias
+        return categoria in self._categorias
 
     def agregar_categoria(self, categoria):
-        self.categorias.append(categoria) 
+        self._categorias.append(categoria) 
 
 def input_seleccion(mensaje):
     while True:
@@ -54,8 +54,6 @@ def input_int(mensaje, que_es):
             input_salid = int(input(mensaje))
         except:
             raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
-        if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
-            raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
         if 0 > input_salid:
             raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
         return input_salid
@@ -63,7 +61,7 @@ def input_int(mensaje, que_es):
 def listar(categoriaservicio):
     encontrado = False
     for i in categoriaservicio.categorias:
-        if i:
+        if i and not i.eliminado:
             encontrado = True
             print(f"ID: {i.id} | {i.nombre}: {i.descripcion}")
     if not encontrado:
@@ -73,10 +71,10 @@ def crear_categoria(nombre:str, descripcion:str, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
     categoriaservicio.agregar_categoria(categoria)
 
-def editar_categoria(_id, categoriaservicio, pedido):
+def editar_categoria(_id, categoriaservicio, pedido=None):
     encontrado = False
     for i in categoriaservicio.categorias:
-        if _id == i.id:
+        if _id == i.id and not i.eliminado:
             encontrado = True
             print("Se encontro la categoria con ese ID")
             nombre_nuevo = input_str("Escriba el nuevo nombre de la categoria: ", "Nombre")
@@ -84,34 +82,37 @@ def editar_categoria(_id, categoriaservicio, pedido):
             nombre_viejo = i.nombre
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
-            for f in pedido.detalles:
-                if f.producto and f.producto.categoria:
-                    if f.producto.categoria.nombre == nombre_viejo:
-                        f.producto.categoria = i
+            
+            if pedido is not None:
+                for f in pedido.detalles:
+                    if f.producto and f.producto.categoria:
+                        if f.producto.categoria.nombre == nombre_viejo:
+                            f.producto.categoria = i
     if encontrado:
         print("¡Categoria editada!")
-    if not encontrado:
+    else:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
 
-def eliminar_categoria(_id, categoriaservicio, pedido):
+def eliminar_categoria(_id, categoriaservicio, pedido=None):
     encontrado = False
     for i in categoriaservicio.categorias:
-        if _id == i.id:
+        if _id == i.id and not i.eliminado:
             encontrado = True
             print("Se encontro la categoria con ese ID")
             while True:
-                opcion = input("¿Usted esta seguro de eliminar esta categoria?(S/N): ")
+                opcion = input("¿Usted esta seguro de eliminar esta categoria?(S/N): ").strip().lower()
                 match opcion:
-                    case "S" | "s":
+                    case "s":
                         id_viejo = i.id
-                        categoriaservicio.categorias.remove(i)
-                        for f in pedido.detalles:
-                            if f.producto and f.producto.categoria:
-                                if f.producto.categoria.id == id_viejo:
-                                    f.producto.categoria = None
+                        i.eliminado = True
+                        if pedido is not None:
+                            for f in pedido.detalles:
+                                if f.producto and f.producto.categoria:
+                                    if f.producto.categoria.id == id_viejo:
+                                        f.producto.categoria = None
                         print("Eliminacion completada.")
                         break
-                    case "N" | "n":
+                    case "n":
                         print("Se cancelo la eliminacion, regresando...")
                         break
     if not encontrado:

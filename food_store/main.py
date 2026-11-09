@@ -1,13 +1,14 @@
-
 import getpass
 from entidades.usuario import Usuario
+from entidades.categoria import Categoria
 from enums.enums import Rol
 from servicios.usuario_servicio import UsuarioServicio
-from excepciones.excepciones import CredencialesInvalidasError
+from servicios.categoriaservicio import Categoriaservicio
+from excepciones.excepciones import CredencialesInvalidasError, FoodStoreError
 from consola.menu import crear_menu
 
-def inicializar_datos(usuario_servicio: UsuarioServicio) -> None:
-    """Carga los usuarios iniciales requeridos en memoria."""
+def inicializar_datos(usuario_servicio: UsuarioServicio, categoria_servicio: Categoriaservicio) -> None:
+    """Carga los usuarios y categorías iniciales requeridos en memoria."""
     admin = Usuario(
         nombre="Ana",
         apellido="Pérez",
@@ -27,9 +28,16 @@ def inicializar_datos(usuario_servicio: UsuarioServicio) -> None:
     usuario_servicio.agregar_usuario(admin)
     usuario_servicio.agregar_usuario(cliente)
 
+    cat_inicial = Categoria("Bebidas", "Gaseosas, jugos y aguas")
+    categoria_servicio.agregar_categoria(cat_inicial)
+
 def main() -> None:
     usuario_servicio = UsuarioServicio()
-    inicializar_datos(usuario_servicio)
+    categoria_servicio = Categoriaservicio()
+    producto_servicio = None
+    pedido_servicio = None
+
+    inicializar_datos(usuario_servicio, categoria_servicio)
     
     ejecutando_sistema = True
 
@@ -55,20 +63,25 @@ def main() -> None:
             ejecutando_sistema = False
             break
         
-        menu = crear_menu(sesion_activa)
+        menu = crear_menu(sesion_activa, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio)
         mantiene_sesion = True
 
         while mantiene_sesion:
-            resultado = menu.mostrar()
-            if resultado == "salir":
-                opcion_salida = input("¿Está seguro de que desea salir del programa? (S/N): ").strip().lower()
-                if opcion_salida == "s":
-                    print("¡Gracias por utilizar Food Store! Hasta luego.")
-                    ejecutando_sistema = False
+            try:
+                resultado = menu.mostrar()
+                if resultado == "salir":
+                    opcion_salida = input("¿Está seguro de que desea salir del programa? (S/N): ").strip().lower()
+                    if opcion_salida == "s":
+                        print("¡Gracias por utilizar Food Store! Hasta luego.")
+                        ejecutando_sistema = False
+                        break
+                if resultado is False:
+                    print("Cerrando sesión...")
                     break
-            if resultado is False:
-                print("Cerrando sesión...")
-                break
+            except FoodStoreError as e:
+                print(f"\n[Error de Negocio]: {e}")
+            except ValueError as e:
+                print(f"\n[Error de Formato]: {e}")
 
 if __name__ == "__main__":
     main()
