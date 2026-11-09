@@ -71,7 +71,7 @@ def crear_categoria(nombre:str, descripcion:str, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
     categoriaservicio.agregar_categoria(categoria)
 
-def editar_categoria(_id, categoriaservicio, pedido=None):
+def editar_categoria(_id, categoriaservicio, pedido_servicio=None):
     encontrado = False
     for i in categoriaservicio.categorias:
         if _id == i.id and not i.eliminado:
@@ -83,17 +83,18 @@ def editar_categoria(_id, categoriaservicio, pedido=None):
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
             
-            if pedido is not None:
-                for f in pedido.detalles:
-                    if f.producto and f.producto.categoria:
-                        if f.producto.categoria.nombre == nombre_viejo:
-                            f.producto.categoria = i
+            if pedido_servicio is not None:
+                for pedido in pedido_servicio.pedidos:
+                    for f in pedido.detalles:
+                        if f.producto and f.producto.categoria:
+                            if f.producto.categoria.nombre == nombre_viejo:
+                                f.producto.categoria = i
     if encontrado:
         print("¡Categoria editada!")
     else:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
 
-def eliminar_categoria(_id, categoriaservicio, pedido=None):
+def eliminar_categoria(_id, categoriaservicio, pedido_servicio=None):
     encontrado = False
     for i in categoriaservicio.categorias:
         if _id == i.id and not i.eliminado:
@@ -105,11 +106,12 @@ def eliminar_categoria(_id, categoriaservicio, pedido=None):
                     case "s":
                         id_viejo = i.id
                         i.eliminado = True
-                        if pedido is not None:
-                            for f in pedido.detalles:
-                                if f.producto and f.producto.categoria:
-                                    if f.producto.categoria.id == id_viejo:
-                                        f.producto.categoria = None
+                        if pedido_servicio is not None:
+                            for pedido in pedido_servicio.pedidos:
+                                for f in pedido.detalles:
+                                    if f.producto and f.producto.categoria:
+                                        if f.producto.categoria.id == id_viejo:
+                                            f.producto.categoria = None
                         print("Eliminacion completada.")
                         break
                     case "n":

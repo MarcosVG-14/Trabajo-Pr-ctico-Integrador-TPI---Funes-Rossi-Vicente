@@ -1,43 +1,38 @@
 import getpass
 from entidades.usuario import Usuario
 from entidades.categoria import Categoria
+from entidades.producto import Producto
 from enums.enums import Rol
 from servicios.usuario_servicio import UsuarioServicio
 from servicios.categoriaservicio import Categoriaservicio
+from servicios.pedido_servicio import PedidoServicio
 from excepciones.excepciones import CredencialesInvalidasError, FoodStoreError
 from consola.menu import crear_menu
 
-def inicializar_datos(usuario_servicio: UsuarioServicio, categoria_servicio: Categoriaservicio) -> None:
-    """Carga los usuarios y categorías iniciales requeridos en memoria."""
-    admin = Usuario(
-        nombre="Ana",
-        apellido="Pérez",
-        mail="admin@foodstore.com",
-        celular="261111222",
-        contrasenia="admin123",
-        rol=Rol.ADMIN
-    )
-    cliente = Usuario(
-        nombre="Juan",
-        apellido="Gómez",
-        mail="cliente@foodstore.com",
-        celular="261333444",
-        contrasenia="user123",
-        rol=Rol.USUARIO
-    )
+def inicializar_datos(usuario_servicio: UsuarioServicio, categoria_servicio: Categoriaservicio, producto_servicio: list) -> None:
+    admin = Usuario("Ana", "Pérez", "admin@foodstore.com", "261111222", "admin123", Rol.ADMIN)
+    cliente = Usuario("Juan", "Gómez", "cliente@foodstore.com", "261333444", "user123", Rol.USUARIO)
     usuario_servicio.agregar_usuario(admin)
     usuario_servicio.agregar_usuario(cliente)
 
-    cat_inicial = Categoria("Bebidas", "Gaseosas, jugos y aguas")
-    categoria_servicio.agregar_categoria(cat_inicial)
+    cat = Categoria("Comidas rápidas", "Hamburguesas y papas")
+    categoria_servicio.agregar_categoria(cat)
+
+    p1 = Producto("Hamburguesa Completa", 4500.0, "Con queso y panceta", 10, "img1.jpg", True)
+    p1.categoria = cat
+    p2 = Producto("Papas Fritas Medianas", 2000.0, "Crocantes con sal", 15, "img2.jpg", True)
+    p2.categoria = cat
+
+    producto_servicio.append(p1)
+    producto_servicio.append(p2)
 
 def main() -> None:
     usuario_servicio = UsuarioServicio()
     categoria_servicio = Categoriaservicio()
-    producto_servicio = None
-    pedido_servicio = None
+    producto_servicio = []
+    pedido_servicio = PedidoServicio()
 
-    inicializar_datos(usuario_servicio, categoria_servicio)
+    inicializar_datos(usuario_servicio, categoria_servicio, producto_servicio)
     
     ejecutando_sistema = True
 
