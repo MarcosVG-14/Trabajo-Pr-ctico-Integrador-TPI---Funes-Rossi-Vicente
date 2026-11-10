@@ -39,10 +39,9 @@ productoservicio1 = Productoservicio()
 producto1.agregar_categoria(categoria1)
 productoservicio1.agregar_producto(producto1)
 productoservicio1.agregar_producto(producto2)
-detalle_pedido1 = DetallePedido(30, 300.2, None)
-detalle_pedido1.agregar_producto(producto1)
-pedido1 = Pedido(datetime.date, Estado.PENDIENTE, 90000.2, FormaPago.EFECTIVO)
-pedido1.agregar_detalle(detalle_pedido1)
+detalle_pedido1 = DetallePedido(5, producto1)
+pedido1 = Pedido(normal, FormaPago.EFECTIVO)
+pedido1.agregar_detalle(5, producto1)
 
 sesion_activa = admin
 sesion_activa.rol.value

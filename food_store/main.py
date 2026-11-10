@@ -1,11 +1,17 @@
-from funciones_basicas import *
+# servicios
+from servicios.categoriaservicio import *
+from servicios.productoservicio import *
+from servicios.categoriaservicio import Categoriaservicio
+from servicios.productoservicio import Productoservicio
+# entidades
 from entidades.pedido import Pedido
 from entidades.detalle_pedido import DetallePedido
 from entidades.producto import Producto
 from entidades.categoria import Categoria
 from entidades.usuario import Usuario
+#enums
 from enums.enums import FormaPago, Rol, Estado
-from servicios.categoriaservicio import Categoriaservicio
+#otros
 from datetime import datetime
 
 # --- CATEGORÍAS ---
@@ -34,16 +40,18 @@ normal = Usuario(
     rol=Rol.USUARIO
 )
 
-categoria1 = Categoria("Nombre de categoria", "Descripcion de categoria")
+categoria1 = Categoria("sal", "tra") 
 producto1 = Producto("Mesa", 55000.5, "Madera de roble, 4 patas.", 5, "De frente", True)
-producto1 = Producto("Silla", 35000.5, "Madera de roble, 4 patas.", 9, "De frente", True)
+producto2 = Producto("Silla", 35000.5, "Madera de roble, 4 patas.", 9, "De frente", False)
+productoservicio1 = Productoservicio()
 categoriaservicio1 = Categoriaservicio()
-producto1.agregar_categoria(categoria1)
 categoriaservicio1.agregar_categoria(categoria1)
-detalle_pedido1 = DetallePedido(30, 300.2, None)
-detalle_pedido1.agregar_producto(producto1)
-pedido1 = Pedido(datetime.date, Estado.PENDIENTE, 90000.2, FormaPago.EFECTIVO)
-pedido1.agregar_producto(detalle_pedido1)
+producto1.agregar_categoria(categoria1)
+productoservicio1.agregar_producto(producto1)
+productoservicio1.agregar_producto(producto2)
+detalle_pedido1 = DetallePedido(5, producto1)
+pedido1 = Pedido(normal, FormaPago.EFECTIVO)
+pedido1.agregar_detalle(5, producto1)
 
 sesion_activa = admin
 sesion_activa.rol.value
@@ -59,7 +67,7 @@ while True:
     match seleccion:
         case 1 | "1" | "uno" | "i" | "listar":
             if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
-                listar(categoriaservicio1)
+                listar_categoria(categoriaservicio1)
         case 2 | "2" | "dos" | "ii" | "crear":
             if sesion_activa.rol.value == "Admin":
                 nombre = input_str("Escriba el nombre de la categoria: ", "Nombre")
