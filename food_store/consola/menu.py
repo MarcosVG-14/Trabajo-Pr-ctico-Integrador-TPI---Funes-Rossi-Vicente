@@ -50,27 +50,17 @@ class MenuAdministrador(Menu):
                     seleccion = input_seleccion("Seleccione: ")
                     match seleccion:
                         case 1 | "1" | "uno" | "i" | "listar":
-                            if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
-                                listar_categoria(categoriaservicio1)
+                            listar_categoria(categoriaservicio1)
                         case 2 | "2" | "dos" | "ii" | "crear":
-                            if sesion_activa.rol.value == "Admin":
-                                nombre = input_str("Escriba el nombre de la categoria: ", "Nombre")
-                                descripcion = input_str("Escriba la descripción de la categoria: ", "Descripción")
-                                crear_categoria(nombre, descripcion, categoriaservicio1)
-                            else:
-                                print("Usted no tiene los permisos necesarios para realizar esta opcion.")
+                            nombre = input_str("Escriba el nombre de la categoria: ", "Nombre")
+                            descripcion = input_str("Escriba la descripción de la categoria: ", "Descripción")
+                            crear_categoria(nombre, descripcion, categoriaservicio1)
                         case 3 | "3" | "tres" | "iii" | "editar":
-                            if sesion_activa.rol.value == "Admin":
-                                _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
-                                editar_categoria(_id, categoriaservicio1, pedido1)
-                            else:
-                                print("Usted no tiene los permisos necesarios para realizar esta opcion.")
+                            _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
+                            editar_categoria(_id, categoriaservicio1, pedido1)
                         case 4 | "4" | "cuatro" | "iv" | "eliminar":
-                            if sesion_activa.rol.value == "Admin":
-                                _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
-                                eliminar_categoria(_id, categoriaservicio1, pedido1)
-                            else:
-                                print("Usted no tiene los permisos necesarios para realizar esta opcion.")
+                            _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
+                            eliminar_categoria(_id, categoriaservicio1, pedido1)
                         case 0 | "0" | "cero" | "o" | "zero" | "volver":
                             print("Regresando...")
                             break
