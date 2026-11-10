@@ -53,7 +53,7 @@ class Producto(Base):
     def stock(self) -> int:
         return self.__stock
 
-    @precio.setter
+    @stock.setter
     def stock(self, stock) -> None:
         if not (isinstance(stock, int) or isinstance(stock, float)):
             raise DatoInvalidoError("El stock debe de ser un valor numerico.")
@@ -82,6 +82,16 @@ class Producto(Base):
         if not (isinstance(categoria, Categoria) or isinstance(categoria, None)):
             raise DatoInvalidoError("La categoria debe venir de la clase Categoria")
         self.__categoria = categoria
+
+    @property
+    def disponible(self):
+        return self.__disponible
+    
+    @disponible.setter
+    def disponible(self, disponible) -> None:
+        if not isinstance(disponible, bool):
+            raise DatoInvalidoError("La disponibilidad debe ser un dato booleano.")
+        self.__disponible
 
     def agregar_categoria(self, categoria):
         if self.categoria:

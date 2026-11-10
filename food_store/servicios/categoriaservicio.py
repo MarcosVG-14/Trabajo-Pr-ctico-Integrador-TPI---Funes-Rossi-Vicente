@@ -76,7 +76,12 @@ def listar_categoria(categoriaservicio):
 
 def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
+    if categoriaservicio.categorias:
+        for i in categoriaservicio.categorias:
+            if i.id == categoria.id:
+                return ("Esta categoria ya esta en la lista.")
     categoriaservicio.agregar_categoria(categoria)
+    return (f"Se creo la categoria en la lista. ID generado: {categoria.id}")
 
 def editar_categoria(_id, categoriaservicio, pedido):
     encontrado = False

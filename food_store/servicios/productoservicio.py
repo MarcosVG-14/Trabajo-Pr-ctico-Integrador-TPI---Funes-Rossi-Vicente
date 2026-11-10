@@ -65,7 +65,17 @@ def input_int(mensaje, que_es):
             raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
         return input_salid
 
-def listar_producto(productoservicio):
+def input_bool(mensaje):
+    while True:
+        print(mensaje)
+        input_salid = input("(S/N): ").lower()
+        match input_salid:
+            case "n":
+                return False
+            case "s":
+                return True
+
+def listar_producto_admin(productoservicio):
     encontrado = False
     while True:
         opcion = input_str("¿Quiere filtar el listado por categoria?(S/N): ","Opcion").lower()
@@ -95,3 +105,43 @@ def listar_producto(productoservicio):
                     break
             case _:
                 print("Escriba N o S")
+
+def listar_producto_cliente(productoservicio):
+    encontrado = False
+    while True:
+        opcion = input_str("¿Quiere filtar el listado por categoria?(S/N): ","Opcion").lower()
+        match opcion:
+            case "s":
+                catego = input_int("Ingrese el ID de la categoria que desea filtar: ","ID de la categoria")
+                for i in productoservicio.productos:
+                    if i.categoria:
+                        if i.categoria.id == catego and i.disponible:
+                            encontrado = True
+                            print(f"ID: {i.id} | {i.nombre}: {i.precio}$ | Stock: {i.stock} | Categoria: {i.categoria.nombre}")
+                if not encontrado:
+                    raise EntidadNoEncontradaError("No hay categorias cargadas o no se encontro una categoria con ese ID.")
+                if encontrado:
+                    break 
+            case "n":
+                for i in productoservicio.productos:
+                    if i.disponible:
+                        encontrado = True
+                        if i.categoria:
+                            print(f"ID: {i.id} | {i.nombre}: {i.precio}$ | Stock: {i.stock} | Categoria: {i.categoria.nombre}")
+                        else:
+                            print(f"ID: {i.id} | {i.nombre}: {i.precio}$ | Stock: {i.stock} | Sin categoria.")
+                if not encontrado:
+                    raise EntidadNoEncontradaError("No hay categorias cargadas.")
+                if encontrado:
+                    break
+            case _:
+                print("Escriba N o S")
+
+def crear_producto(nombre: str, precio: float, descripcion: str, stock: int, imagen: str, disponible: bool, productoservicio):
+    producto = Producto(nombre, precio, descripcion, stock, imagen, disponible)
+    if productoservicio.productos:
+        for i in productoservicio.productos:
+            if i.id == producto.id:
+                return ("Este producto ya esta en la lista.")
+    productoservicio.agregar_producto(producto)
+    return (f"Se creo el producto en la lista. ID generado: {producto.id}")
