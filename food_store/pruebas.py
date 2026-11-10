@@ -63,14 +63,15 @@ while True:
                 listar_producto_cliente(productoservicio1)
         case 2 | "2" | "dos" | "ii" | "crear":
             nombre = input_str("Escriba el nombre del nuevo producto: ", "Nombre")
-            precio = input_str("Escriba el precio del nuevo producto: ", "Precio")
+            precio = input_float("Escriba el precio del nuevo producto: ", "Precio")
             descripcion = input_str("Escriba la descripcion del nuevo producto: ", "Descripcion")
             stock = input_int("Escriba el stock inicial del nuevo producto: ", "Stock")
             imagen = input_str("Ingrese el url de la imagen del producto: ", "Imagen")
             disponible = input_bool("¿El producto esta disponible?: ")
             crear_producto(nombre, precio, descripcion, stock, imagen, disponible, productoservicio1)
         case 3 | "3" | "tres" | "iii" | "editar":
-            pass
+            _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
+            editar_producto(_id, productoservicio1, pedido1)
         case 4 | "4" | "cuatro" | "iv" | "eliminar":
             pass
         case 0 | "0" | "cero" | "o" | "zero" | "volver":

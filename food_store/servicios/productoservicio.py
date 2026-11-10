@@ -65,6 +65,18 @@ def input_int(mensaje, que_es):
             raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
         return input_salid
 
+def input_float(mensaje, que_es):
+    while True:
+        try:
+            input_salid = float(input(mensaje))
+        except:
+            raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
+        if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
+            raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
+        if 0 > input_salid:
+            raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
+        return input_salid
+
 def input_bool(mensaje):
     while True:
         print(mensaje)
@@ -145,3 +157,31 @@ def crear_producto(nombre: str, precio: float, descripcion: str, stock: int, ima
                 return ("Este producto ya esta en la lista.")
     productoservicio.agregar_producto(producto)
     return (f"Se creo el producto en la lista. ID generado: {producto.id}")
+
+def editar_producto(_id, productoservicio, pedido):
+    encontrado = False
+    for i in productoservicio.productos:
+        if _id == i.id:
+            encontrado = True
+            print("Se encontro un producto con ese ID") # nombre: str, precio: float, descripcion: str, stock: int, imagen: str, disponible: bool
+            nombre_nuevo = input_str("Escriba el nuevo nombre del producto: ", "Nombre")
+            precio_nuevo = input_float("Escriba el nuevo precio del producto: ", "Precio")
+            descripcion_nueva = input_str("Escriba la nueva descripción del producto: ", "Descripción")
+            stock_nuevo = input_int("Escriba el nuevo stock del producto: ", "Stock")
+            imagen_nueva = input_str("Escriba el nuevo url de la imagen del producto: ", "URL de la imagen")
+            disponible_nuevo = input_bool("¿El producto sigue estando disponible?: ")
+            nombre_viejo = i.nombre
+            i.nombre = nombre_nuevo.capitalize()
+            i.precio = precio_nuevo
+            i.descripcion = descripcion_nueva.capitalize()
+            i.stock = stock_nuevo
+            i.imagen = imagen_nueva
+            i.disponible = disponible_nuevo
+            for f in pedido.detalles:
+                if f.producto:
+                    if f.producto.nombre == nombre_viejo:
+                        f.producto = i
+    if encontrado:
+        print("¡Categoria editada!")
+    if not encontrado:
+        raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
