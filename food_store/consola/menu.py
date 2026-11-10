@@ -108,13 +108,12 @@ class MenuAdministrador(Menu):
                     seleccion = input("Seleccione: ")
                     match seleccion:
                         case "1" | "uno" | "i" | "listar":
-                            if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
-                                usuarios = usuario_servicio.usuarios_activos()
-                                if not usuarios:
-                                    print("No hay usuarios cargados.")
-                                else:
-                                    for usuario in usuarios:
-                                        print(f"""Id: {usuario.id}
+                            usuarios = usuario_servicio.usuarios_activos()
+                            if not usuarios:
+                                print("No hay usuarios cargados.")
+                            else:
+                                for usuario in usuarios:
+                                    print(f"""Id: {usuario.id}
 Nombre: {usuario.nombre}
 Apellido: {usuario.apellido}
 Mail: {usuario.mail}
