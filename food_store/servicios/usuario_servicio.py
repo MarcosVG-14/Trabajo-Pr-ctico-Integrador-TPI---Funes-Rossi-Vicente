@@ -67,14 +67,48 @@ class UsuarioServicio:
         )
         self.__usuarios.append(nuevo_usuario)
 
-        def buscar_por_id(self, _id:int) -> Usuario:
-            '''Busca un usuario activo por su ID y lo retorna, o lanza excepción.'''
-            for usuario in self.__usuarios:
-                if usuario.id == _id and not usuario.eliminado:
-                    return usuario
-            raise EntidadNoEncontradaError("No se encontró un usuario activo con ese ID.")
+    def buscar_por_id(self, _id:int) -> Usuario:
+        '''Busca un usuario activo por su ID y lo retorna, o lanza excepción.'''
+        for usuario in self.__usuarios:
+            if usuario.id == _id and not usuario.eliminado:
+                return usuario
+        raise EntidadNoEncontradaError("No se encontró un usuario activo con ese ID.")
 
-        def eliminar_usuario(self, _id:int) -> None:
-            for usuario in self.__usuarios:
-                if usuario.id == _id and not usuario.eliminado:
-                    usuario.eliminado = True
+    def eliminar_usuario(self, _id:int) -> None:
+        '''Elimina un usuario (Le da la baja lógica), cambia el valor de eliminado de False a True'''
+        for usuario in self.__usuarios:
+            if usuario.id == _id and not usuario.eliminado:
+                usuario.eliminado = True
+
+    def cambio_nombre(self, usuario:Usuario, nombre:str) -> None:
+        '''Si todos los valores son ingresados correctamente, cambia el nombre del usuario'''
+        usuario.nombre = nombre
+
+    def cambio_apellido(self, usuario:Usuario, apellido:str) -> None:
+        '''Si todos los valores son ingresados correctamente, cambia el apellido del usuario'''
+        usuario.apellido = apellido
+
+    def cambio_mail(self, usuario_editado:Usuario, mail:str) -> None:
+        '''Si todos los valores son ingresados correctamente y no hay mails repetidos, cambia el mail del usuario'''
+        if "@" not in mail or "." not in mail:
+            raise TypeError("El mail debe contener '@' y '.'")
+        for usuario in self.__usuarios:
+            if not usuario.eliminado and usuario.id != usuario_editado.id:
+                if usuario.mail.lower() == mail.lower():
+                    raise ValueError("Ya existe un usuario registrado con ese mail.")
+        usuario_editado.mail = mail
+
+    def cambio_celular(self, usuario:Usuario, celular:str) -> None:
+        '''Si todos los valores son ingresados correctamente, cambia el celular del usuario'''
+        usuario.celular = celular
+
+    def cambio_contrasenia(self, usuario:Usuario, contrasenia:str) -> None:
+        '''Si todos los valores son ingresados correctamente, cambia la contraseña del usuario'''
+        usuario.contrasenia = contrasenia
+
+    def cambio_rol(self, usuario:Usuario, rol:int) -> None:
+        '''Si todos los valores son ingresados correctamente, cambia el rol del usuario'''
+        if rol == 1:
+            usuario.rol = Rol.ADMIN
+        elif rol == 2:
+            usuario.rol = Rol.USUARIO

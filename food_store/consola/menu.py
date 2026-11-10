@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from entidades.usuario import Usuario
 from enums.enums import Rol
 from servicios.categoriaservicio import *
-from servicios.usuario_servicio import *
+from servicios.usuario_servicio import UsuarioServicio
 
 class Menu(ABC):
     def __init__(self, usuario: Usuario) -> None:
@@ -113,10 +113,10 @@ Rol: {usuario.rol.name}
                                 print("Usted no tiene los permisos necesarios para realizar esta opcion.")
                         case "3" | "tres" | "iii" | "editar":
                             if sesion_activa.rol.value == "Admin":
-                                _id = input_int("Escriba el ID de la categoria que desea buscar: ", "ID")
+                                _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
                                 usuario_a_editar = usuario_servicio.buscar_por_id(_id)
                                 while True:
-                                    opcion = print(f""" - Usted accedó al Usuario de ID {_id} - {usuario_a_editar.nombre} {usuario_a_editar.nombre} - 
+                                    opcion = input(f""" - Usted accedó al Usuario de ID {_id} - {usuario_a_editar.nombre} {usuario_a_editar.apellido} - 
     ¿Qué valor le gustaría actualizar?
 
 1- Nombre
@@ -132,28 +132,254 @@ Rol: {usuario.rol.name}
     Seleccione una opción: """)
                                     match opcion:
                                         case "1" | "uno" | "i" | "nombre":
-                                            nuevo_nombre = input_str("Ingrese el nuevo nombre: ")
-                                            confirmacion = input("""¿Estás seguro de hacer cambio?
+                                            nuevo_nombre = input_str("Ingrese el nuevo nombre: ", "Nombre")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
 - SI 
 - NO
 
     - """)
-                                    while True:
-                                        match confirmacion:
-                                            case "si" | "SI" | "Si":
-                                                usuario.nombre = nuevo_nombre
-                                                print("Nombre de usuario cambiado.")
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_nombre(usuario_a_editar, nuevo_nombre)
+                                                        print("Nombre de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
                                                 break
-                                            case "no" | "NO" | "No":
-                                                print("Acción cancelada.")
+                                        case "2" | "dos" | "ii" | "apellido":
+                                            nuevo_apellido = input_str("Ingrese el nuevo apellido: ", "Apellido")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_apellido(usuario_a_editar, nuevo_apellido)
+                                                        print("Apellido de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
                                                 break
-                                            case _:
-                                                print("Error... Comando incorrecto")
+                                        case "3" | "tres" | "iii" | "mail":
+                                            nuevo_mail = input_str("Ingrese el nuevo mail: ", "Mail")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        try: 
+                                                            usuario_servicio.cambio_mail(usuario_a_editar, nuevo_mail)
+                                                            print("Mail de usuario cambiado.")
+                                                        except TypeError as e:
+                                                            print(e)
+                                                            break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                        case "4" | "cuatro" | "iv" | "celular":
+                                            nuevo_celular = input_str("Ingrese el nuevo celular: ", "Celular")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_celular(usuario_a_editar, nuevo_celular)
+                                                        print("Celular de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                        case "5" | "cinco" | "v" | "contraseña":
+                                            nueva_contrasenia = input_str("Ingrese la nueva contraseña: ", "Contraseña")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_contrasenia(usuario_a_editar, nueva_contrasenia)
+                                                        print("Contraseña de usuario cambiada.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                        case "6" | "seis" | "vi" | "rol":
+                                            nuevo_rol = input_str("Ingrese el nuevo rol: ", "Rol")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                        print("Rol de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                        case "7" | "siete" | "vii" | "todos":
+                                            nuevo_nombre = input_str("Ingrese el nuevo nombre: ", "Nombre")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_nombre(usuario_a_editar, nuevo_nombre)
+                                                        print("Nombre de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                            nuevo_apellido = input_str("Ingrese el nuevo apellido: ", "Apellido")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_apellido(usuario_a_editar, nuevo_apellido)
+                                                        print("Apellido de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                            nuevo_mail = input_str("Ingrese el nuevo mail: ", "Mail")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        try: 
+                                                            usuario_servicio.cambio_mail(usuario_a_editar, nuevo_mail)
+                                                            print("Mail de usuario cambiado.")
+                                                        except TypeError as e:
+                                                            print(e)
+                                                            break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                            nuevo_celular = input_str("Ingrese el nuevo celular: ", "Celular")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_celular(usuario_a_editar, nuevo_celular)
+                                                        print("Celular de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                            nueva_contrasenia = input_str("Ingrese la nueva contraseña: ", "Contraseña")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_contrasenia(usuario_a_editar, nueva_contrasenia)
+                                                        print("Contraseña de usuario cambiada.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                            nuevo_rol = input_str("Ingrese el nuevo rol: ", "Rol")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                        print("Rol de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
+                                            nuevo_rol = input_str("Ingrese el nuevo rol: ", "Rol")
+                                            while True:
+                                                confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+    - """)
+                                                match confirmacion:
+                                                    case "si" | "SI" | "Si":
+                                                        usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                        print("Rol de usuario cambiado.")
+                                                        break
+                                                    case "no" | "NO" | "No":
+                                                        print("Acción cancelada.")
+                                                        break
+                                                    case _:
+                                                        print("Error... Comando incorrecto")
+                                                break
                             else:
-                                print("Usted no tiene los permisos necesarios para realizar esta opcion.")
-
-
-                                
+                                print("Usted no tiene los permisos necesarios para realizar esta opcion.")  
                         case "4" | "cuatro" | "iv" | "eliminar":
                             if sesion_activa.rol.value == "Admin":
                                 _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
