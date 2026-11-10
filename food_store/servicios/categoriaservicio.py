@@ -23,7 +23,12 @@ class Categoriaservicio:
         return producto in self._categorias
 
     def agregar_categoria(self, categoria):
-        self.categorias.append(categoria) 
+        if self._categorias:
+            for i in self._productos:
+                if i.id == producto.id:
+                    return ("Esta categoria ya esta en la lista.")
+        self.categorias.append(categoria)
+        return ("Se agrego la categoria en la lista.")
 
 def input_seleccion(mensaje):
     while True:
@@ -60,7 +65,7 @@ def input_int(mensaje, que_es):
             raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
         return input_salid
 
-def listar(categoriaservicio):
+def listar_categoria(categoriaservicio):
     encontrado = False
     for i in categoriaservicio.categorias:
         if i:
@@ -69,9 +74,14 @@ def listar(categoriaservicio):
     if not encontrado:
         raise EntidadNoEncontradaError("No hay categorias cargadas.")
 
-def crear_categoria(nombre:str, descripcion:str, categoriaservicio):
+def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
+    if categoriaservicio.categorias:
+        for i in categoriaservicio.categorias:
+            if i.id == categoria.id:
+                return ("Esta categoria ya esta en la lista.")
     categoriaservicio.agregar_categoria(categoria)
+    return (f"Se creo la categoria en la lista. ID generado: {categoria.id}")
 
 def editar_categoria(_id, categoriaservicio, pedido):
     encontrado = False
@@ -114,5 +124,7 @@ def eliminar_categoria(_id, categoriaservicio, pedido):
                     case "N" | "n":
                         print("Se cancelo la eliminacion, regresando...")
                         break
+                    case _:
+                        print("Escriba S o N.")
     if not encontrado:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")

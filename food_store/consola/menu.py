@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from entidades.usuario import Usuario
 from enums.enums import Rol
 from servicios.categoriaservicio import *
+from servicios.productoservicio import *
 from servicios.usuario_servicio import UsuarioServicio
 
 class Menu(ABC):
@@ -73,7 +74,39 @@ class MenuAdministrador(Menu):
                         case 0 | "0" | "cero" | "o" | "zero" | "volver":
                             print("Regresando...")
                             break
-            
+
+            case "2" | "dos":
+                while True:
+                    print("""--- PRODUCTOS ---
+1. Listar
+2. Crear
+3. Editar
+4. Eliminar
+0. Volver""")
+                    seleccion = input_seleccion("Seleccione: ")
+                    match seleccion:
+                        case 1 | "1" | "uno" | "i" | "listar":
+                            listar_producto_admin(productoservicio1)
+                        case 2 | "2" | "dos" | "ii" | "crear":
+                            nombre = input_str("Escriba el nombre del nuevo producto: ", "Nombre")
+                            precio = input_float("Escriba el precio del nuevo producto: ", "Precio")
+                            descripcion = input_str("Escriba la descripcion del nuevo producto: ", "Descripcion")
+                            stock = input_int("Escriba el stock inicial del nuevo producto: ", "Stock")
+                            imagen = input_str("Ingrese el url de la imagen del producto: ", "Imagen")
+                            disponible = input_bool("¿El producto esta disponible?: ")
+                            crear_producto(nombre, precio, descripcion, stock, imagen, disponible, productoservicio1)
+                        case 3 | "3" | "tres" | "iii" | "editar":
+                            _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
+                            editar_producto(_id, productoservicio1, pedido1)
+                        case 4 | "4" | "cuatro" | "iv" | "eliminar":
+                            _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
+                            eliminar_categoria(_id, productoservicio1, pedido1)
+                        case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                            print("Regresando...")
+                            break
+                        case _:
+                            print("Ingrese una opcion mostrada en pantalla.")
+
             case "3" | "tres":
                 while True:
                     print("""--- USUARIOS ---
@@ -449,7 +482,7 @@ class MenuCliente(Menu):
             case "0":
                 return "salir"
 
-            case "1":
+            case "1" | "uno":
                 while True:
                     print("""--- CATEGORÍAS ---
 1. Listar
@@ -462,6 +495,21 @@ class MenuCliente(Menu):
                         case 0 | "0" | "cero" | "o" | "zero" | "volver":
                             print("Regresando...")
                             break
+
+            case "2" | "dos":
+                while True:
+                    print("""--- PRODUCTOS ---
+1. Listar
+0. Volver""")
+                    seleccion = input_seleccion("Seleccione: ")
+                    match seleccion:
+                        case 1 | "1" | "uno" | "i" | "listar":
+                            listar_producto_cliente(productoservicio1)
+                        case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                            print("Regresando...")
+                            break
+                        case _:
+                            print("Ingrese una opcion mostrada en pantalla.")
 
             case "9":
                 print("Cerrando sesión de cliente...")
