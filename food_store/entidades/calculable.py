@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
-@abstractmethod
-def calcular_total() -> None:
-    pass
+class Calculable(ABC):
+    @abstractmethod
+    def calcular_total() -> None:
+        pass

@@ -211,3 +211,5 @@ def eliminar_categoria(_id, productoservicio, pedido):
                         print("Escriba S o N.")
     if not encontrado:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
+
+productoservicio1 = Productoservicio()
