@@ -73,7 +73,8 @@ while True:
             _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
             editar_producto(_id, productoservicio1, pedido1)
         case 4 | "4" | "cuatro" | "iv" | "eliminar":
-            pass
+            _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
+            eliminar_categoria(_id, productoservicio1, pedido1)
         case 0 | "0" | "cero" | "o" | "zero" | "volver":
             print("Regresando...")
             break

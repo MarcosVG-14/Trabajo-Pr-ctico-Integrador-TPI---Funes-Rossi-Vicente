@@ -124,5 +124,7 @@ def eliminar_categoria(_id, categoriaservicio, pedido):
                     case "N" | "n":
                         print("Se cancelo la eliminacion, regresando...")
                         break
+                    case _:
+                        print("Escriba S o N.")
     if not encontrado:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")

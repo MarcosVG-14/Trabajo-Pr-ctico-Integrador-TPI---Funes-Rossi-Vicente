@@ -185,3 +185,29 @@ def editar_producto(_id, productoservicio, pedido):
         print("¡Categoria editada!")
     if not encontrado:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
+
+def eliminar_categoria(_id, productoservicio, pedido):
+    encontrado = False
+    for i in productoservicio.productos:
+        if _id == i.id:
+            encontrado = True
+            print("Se encontro el producto con ese ID")
+            while True:
+                opcion = input("¿Usted esta seguro de eliminar este producto?(S/N): ")
+                match opcion:
+                    case "S" | "s":
+                        id_viejo = i.id
+                        productoservicio.productos.remove(i)
+                        for f in pedido.detalles:
+                            if f.producto:
+                                if f.producto.id == id_viejo:
+                                    f.producto = None
+                        print("Eliminacion completada.")
+                        break
+                    case "N" | "n":
+                        print("Se cancelo la eliminacion, regresando...")
+                        break
+                    case _:
+                        print("Escriba S o N.")
+    if not encontrado:
+        raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
