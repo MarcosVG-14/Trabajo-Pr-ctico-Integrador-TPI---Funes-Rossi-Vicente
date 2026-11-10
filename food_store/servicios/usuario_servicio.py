@@ -1,6 +1,6 @@
 from enums.enums import Rol
 from entidades.usuario import Usuario
-from excepciones.excepciones import CredencialesInvalidasError
+from excepciones.excepciones import *
 
 class UsuarioServicio:
     def __init__(self) -> None:
@@ -11,14 +11,14 @@ class UsuarioServicio:
         self.__usuarios.append(usuario)
 
     def autenticar(self, mail: str, contrasenia: str) -> Usuario:
-        """
+        '''
         Verifica si las credenciales coinciden con algún usuario activo.
         
         Lanza CredencialesInvalidasError si:
         - El mail no existe
         - La contraseña no coincide
         - El usuario está dado de baja (eliminado == True)
-        """
+        '''
         for usuario in self.__usuarios:
             if usuario.mail.lower() == mail.strip().lower() and not usuario.eliminado:
                 if usuario.verificar_contrasenia(contrasenia):
@@ -51,6 +51,7 @@ class UsuarioServicio:
         for usuario in self.__usuarios:
             if usuario.mail.lower() == mail.lower():
                 raise ValueError("Ya existe un usuario registrado con ese mail.")
+        rol = int(rol)
         if rol == 1:
             rol_enum = Rol.ADMIN
         elif rol == 2:
@@ -66,6 +67,7 @@ class UsuarioServicio:
             rol=rol_enum
         )
         self.__usuarios.append(nuevo_usuario)
+        return nuevo_usuario
 
     def buscar_por_id(self, _id:int) -> Usuario:
         '''Busca un usuario activo por su ID y lo retorna, o lanza excepción.'''
@@ -112,3 +114,5 @@ class UsuarioServicio:
             usuario.rol = Rol.ADMIN
         elif rol == 2:
             usuario.rol = Rol.USUARIO
+
+usuario_servicio = UsuarioServicio()

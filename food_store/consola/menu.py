@@ -1,10 +1,9 @@
-
 from abc import ABC, abstractmethod
 from entidades.usuario import Usuario
 from enums.enums import Rol
 from servicios.categoriaservicio import *
 from servicios.productoservicio import *
-from servicios.usuario_servicio import UsuarioServicio
+from servicios.usuario_servicio import *
 
 class Menu(ABC):
     def __init__(self, usuario: Usuario) -> None:
@@ -108,12 +107,12 @@ class MenuAdministrador(Menu):
                     seleccion = input("Seleccione: ")
                     match seleccion:
                         case "1" | "uno" | "i" | "listar":
-                            usuarios = usuario_servicio.usuarios_activos()
-                            if not usuarios:
-                                print("No hay usuarios cargados.")
-                            else:
-                                for usuario in usuarios:
-                                    print(f"""Id: {usuario.id}
+                                usuarios = usuario_servicio.usuarios_activos()
+                                if not usuarios:
+                                    print("No hay usuarios cargados.")
+                                else:
+                                    for usuario in usuarios:
+                                        print(f"""Id: {usuario.id}
 Nombre: {usuario.nombre}
 Apellido: {usuario.apellido}
 Mail: {usuario.mail}
@@ -127,7 +126,7 @@ Rol: {usuario.rol.name}
                                 celular = input("Ingrese el celular del usuario: ").strip()
                                 contrasenia = input("Ingrese el contraseña del usuario: ").strip()
                                 rol = input("Ingrese el rol del usuario (1 = Admin | 2 = Usuario): ").strip()
-                                usuario_servicio.crear_usuario(nombre, apellido, mail, celular, contrasenia, rol)
+                                nuevo_usuario = usuario_servicio.crear_usuario(nombre, apellido, mail, celular, contrasenia, rol)
                                 print(f"Usuario creado exitosamente. ID asignado: {nuevo_usuario.id}")
                                 break
                         case "3" | "tres" | "iii" | "editar":
@@ -398,29 +397,26 @@ Seleccione una opción: """)
                                             break
                         case "4" | "cuatro" | "iv" | "eliminar":
                             _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
-                            usuario_a_borrar = usuario_servicio.buscar_por_id(_id)
-                            if usuario_a_borrar == sesion_activa.id:
-                                raise OperacionNoPermitidaError("No puedes borrarte a tí mismo.")
-                            if _id:
-                                opcion = input(f"""¿Estás seguro de dar la baja lógica al usuario de id {usuario_a_borrar}?
-- Si
-- No        
-
-- """)
-                                while True: 
-                                    match opcion:
-                                        case "si" | "SI" | "Si":
-                                            usuario_servicio.eliminar_usuario(usuario_a_borrar)
-                                            print(f"Se eliminó al usuario de ID '{usuario_a_borrar}'")
-                                            break
-                                        case "no" | "NO" | "No":
-                                            print("Acción cancelada.")
-                                            break
-                                        case _:
-                                            print("Error... Comando incorrecto")
-                            else:
+                            try:
+                                usuario_a_borrar = usuario_servicio.buscar_por_id(_id)
+                            except Exception:
                                 print(f"El ID {_id} no fue encontrado en la lista.")
-
+                                continue
+                            if usuario_a_borrar.id == self.usuario.id:
+                                print("No puedes darte de baja a ti mismo.")
+                                continue
+                            while True:
+                                confirmacion = input(f"¿Estás seguro de dar la baja lógica al usuario {usuario_a_borrar.nombre} {usuario_a_borrar.apellido}? (Si/No): ").strip()
+                                match confirmacion:
+                                    case "si" | "SI" | "Si" | "s" | "S":
+                                        usuario_servicio.eliminar_usuario(_id)
+                                        print(f"Se eliminó al usuario de ID '{_id}' exitosamente.")
+                                        break
+                                    case "no" | "NO" | "No" | "n" | "N":
+                                        print("Acción cancelada.")
+                                        break
+                                    case _:
+                                        print("Error... Comando incorrecto.")
                         case "5" | "cinco" | "v" | "datos":
                             _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
                             usuario = usuario_servicio.buscar_por_id(_id)
