@@ -4,6 +4,31 @@ from enums.enums import Rol, Estado, FormaPago
 from servicios.categoriaservicio import input_seleccion, input_str, input_int
 from servicios.productoservicio import listar_producto_admin, listar_producto_cliente, crear_producto, editar_producto, eliminar_producto, input_float, input_bool, asignar_categoria
 from excepciones.excepciones import FoodStoreError, OperacionNoPermitidaError
+import os
+
+# Definición de colores ANSI
+RESET = "\033[0m"
+NEGRITA = "\033[1m"
+
+# Colores de texto
+ROJO = "\033[31m"
+VERDE = "\033[32m"
+AMARILLO = "\033[33m"
+AZUL = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN = "\033[36m"
+BLANCO = "\033[37m"
+
+'''Función que regula la ejecución del programa para mantener un orden y tempo'''
+def continuar():
+    print()
+    input("""-- Presione cualquier tecla para continuar --
+""")
+
+'''Función que limpia la consola para que se vea mejor'''
+def limpiado_consola():
+    if os.name == 'nt':
+        os.system('cls') 
 
 class Menu(ABC):
     def __init__(self, usuario: Usuario) -> None:
@@ -115,46 +140,183 @@ class MenuAdministrador(Menu):
 
             case "3" | "tres":
                 while True:
-                    print("""--- USUARIOS ---
-1. Listar
-2. Crear
-3. Editar
-4. Eliminar
-0. Volver""")
+                    print(f"""--- USUARIOS ---
+{VERDE}1.{AZUL} Listar{RESET}
+{VERDE}2.{AZUL} Crear{RESET}
+{VERDE}3.{AZUL} Editar{RESET}
+{VERDE}4.{AZUL} Eliminar{RESET}
+{VERDE}5.{AZUL} Mis datos{RESET}
+{ROJO}0.{AZUL} Volver{RESET}""")
                     try:
                         seleccion = input("Seleccione: ").strip()
+                        limpiado_consola()
                         match seleccion:
                             case "1" | "uno" | "i" | "listar":
                                 usuarios = self.usuario_servicio.usuarios_activos()
                                 if not usuarios:
                                     print("No hay usuarios cargados.")
+                                    continuar()
+                                    limpiado_consola()
                                 else:
                                     for usuario in usuarios:
-                                        print(f"Id: {usuario.id} | {usuario.nombre} {usuario.apellido} | Mail: {usuario.mail} | Rol: {usuario.rol.name}")
+                                        print(f"""Id: {usuario.id}
+Nombre: {usuario.nombre}
+Apellido: {usuario.apellido}
+Mail: {usuario.mail}
+Rol: {usuario.rol.name}
+-------------------------""")
+                                    continuar()
+                                    limpiado_consola()
+
                             case "2" | "dos" | "ii" | "crear":
-                                nombre = input("Ingrese el nombre: ").strip()
-                                apellido = input("Ingrese el apellido: ").strip()
-                                mail = input("Ingrese el mail: ").strip()
+                                nombre = input_str("Ingrese el nombre: ", "Nombre").strip()
+                                apellido = input_str("Ingrese el apellido: ", "Apellido").strip()
+                                mail = input_str("Ingrese el mail: ", "Mail").strip()
                                 celular = input("Ingrese el celular: ").strip()
                                 contrasenia = input("Ingrese la contraseña: ").strip()
-                                rol = input("Ingrese rol (1 = Admin | 2 = Usuario): ").strip()
+                                rol = input_int("Ingrese rol (1 = Admin | 2 = Usuario): ", "Rol")
                                 self.usuario_servicio.crear_usuario(nombre, apellido, mail, celular, contrasenia, rol)
                                 print("Usuario creado exitosamente.")
+                                continuar()
+                                limpiado_consola()
+
+                            case "3" | "tres" | "iii" | "editar":
+                                _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
+                                usuario_a_editar = self.usuario_servicio.buscar_por_id(_id)
+                                
+                                # Submenú de edición con el formato integrado
+                                editando = True
+                                while editando:
+                                    print(f"""\n{CYAN}- Usted accedió al Usuario de ID {_id}{RESET}
+- {usuario_a_editar.nombre} {usuario_a_editar.apellido}
+¿Qué valor le gustaría actualizar?
+
+{VERDE}1.{AZUL} Nombre{RESET}
+{VERDE}2.{AZUL} Apellido{RESET}
+{VERDE}3.{AZUL} Mail{RESET}
+{VERDE}4.{AZUL} Celular{RESET}
+{VERDE}5.{AZUL} Contraseña{RESET}
+{VERDE}6.{AZUL} Rol{RESET}
+{ROJO}8.{AZUL} Salir / Volver{RESET}
+
+Seleccione una opción: """, end="")
+                                    opcion_editar = input().strip()
+
+                                    if opcion_editar == "8":
+                                        editando = False
+                                        break
+
+                                    match opcion_editar:
+                                        case "1" | "uno" | "i" | "nombre":
+                                            nuevo_nombre = input_str("Ingrese el nuevo nombre: ", "Nombre")
+                                            confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
+                                            if confirmacion.lower() in ["si", "s"]:
+                                                self.usuario_servicio.cambio_nombre(usuario_a_editar, nuevo_nombre)
+                                                print("Nombre de usuario cambiado.")
+                                            else:
+                                                print("Acción cancelada.")
+                                            continuar()
+                                            limpiado_consola()
+
+                                        case "2" | "dos" | "ii" | "apellido":
+                                            nuevo_apellido = input_str("Ingrese el nuevo apellido: ", "Apellido")
+                                            confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
+                                            if confirmacion.lower() in ["si", "s"]:
+                                                self.usuario_servicio.cambio_apellido(usuario_a_editar, nuevo_apellido)
+                                                print("Apellido de usuario cambiado.")
+                                            else:
+                                                print("Acción cancelada.")
+                                            continuar()
+                                            limpiado_consola()
+
+                                        case "3" | "tres" | "iii" | "mail":
+                                            nuevo_mail = input_str("Ingrese el nuevo mail: ", "Mail")
+                                            confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
+                                            if confirmacion.lower() in ["si", "s"]:
+                                                try: 
+                                                    self.usuario_servicio.cambio_mail(usuario_a_editar, nuevo_mail)
+                                                    print("Mail de usuario cambiado.")
+                                                except TypeError as e:
+                                                    print(e)
+                                            else:
+                                                print("Acción cancelada.")
+                                            continuar()
+                                            limpiado_consola()
+
+                                        case "4" | "cuatro" | "iv" | "celular":
+                                            nuevo_celular = input_str("Ingrese el nuevo celular: ", "Celular")
+                                            confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
+                                            if confirmacion.lower() in ["si", "s"]:
+                                                self.usuario_servicio.cambio_celular(usuario_a_editar, nuevo_celular)
+                                                print("Celular de usuario cambiado.")
+                                            else:
+                                                print("Acción cancelada.")
+                                            continuar()
+                                            limpiado_consola()
+
+                                        case "5" | "cinco" | "v" | "contraseña":
+                                            nueva_contrasenia = input_str("Ingrese la nueva contraseña: ", "Contraseña")
+                                            confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
+                                            if confirmacion.lower() in ["si", "s"]:
+                                                self.usuario_servicio.cambio_contrasenia(usuario_a_editar, nueva_contrasenia)
+                                                print("Contraseña de usuario cambiada.")
+                                            else:
+                                                print("Acción cancelada.")
+                                            continuar()
+                                            limpiado_consola()
+
+                                        case "6" | "seis" | "vi" | "rol":
+                                            nuevo_rol = input_int("Ingrese el nuevo rol (1 = Admin | 2 = Usuario): ", "Rol")
+                                            confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
+                                            if confirmacion.lower() in ["si", "s"]:
+                                                self.usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                print("Rol de usuario cambiado.")
+                                            else:
+                                                print("Acción cancelada.")
+                                            continuar()
+                                            limpiado_consola()
+
+                                        case _:
+                                            print("Error... Comando incorrecto")
+                                            continuar()
+                                            limpiado_consola()
+
                             case "4" | "cuatro" | "iv" | "eliminar":
                                 _id = input_int("Escriba el ID del usuario: ", "ID")
                                 usuario_a_borrar = self.usuario_servicio.buscar_por_id(_id)
                                 if usuario_a_borrar.id == self.usuario.id:
                                     raise OperacionNoPermitidaError("No puedes borrarte a tí mismo.")
-                                if input(f"¿Dar baja lógica a {usuario_a_borrar.nombre}? (S/N): ").strip().lower() == "s":
+                                
+                                confirmacion = input(f"{ROJO}¿Dar baja lógica a {usuario_a_borrar.nombre}? (S/N):{RESET} ").strip().lower()
+                                if confirmacion in ["si", "s"]:
                                     self.usuario_servicio.eliminar_usuario(_id)
                                     print(f"Usuario {_id} eliminado.")
+                                else:
+                                    print(f"Usuario {_id} no ha sido eliminado.")
+                                continuar()
+                                limpiado_consola()
+
+                            case "5" | "cinco" | "v" | "datos":
+                                print(f"""Id: {self.usuario.id}
+Nombre: {self.usuario.nombre}
+Apellido: {self.usuario.apellido}
+Mail: {self.usuario.mail}
+Rol: {self.usuario.rol.name}
+-------------------------""")
+                                continuar()
+                                limpiado_consola()
+
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                                print("Volviendo...")
                                 break
                     except FoodStoreError as e:
-                        print(f"\n[Error de Negocio]: {e}")
+                        print(f"\n{ROJO}[Error de Negocio]: {e}{RESET}")
+                        continuar()
+                        limpiado_consola()
                     except ValueError as e:
-                        print(f"\n[Error de Formato]: {e}")
-
+                        print(f"\n{ROJO}[Error de Formato]: {e}{RESET}")
+                        continuar()
+                        limpiado_consola()
             case "4" | "cuatro":
                 while True:
                     print("""--- GESTIÓN DE PEDIDOS ---

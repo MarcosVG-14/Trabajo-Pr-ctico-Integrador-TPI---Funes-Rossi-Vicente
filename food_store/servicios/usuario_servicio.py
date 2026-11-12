@@ -115,4 +115,6 @@ class UsuarioServicio:
         elif rol == 2:
             usuario.rol = Rol.USUARIO
 
+
+
 usuario_servicio = UsuarioServicio()
