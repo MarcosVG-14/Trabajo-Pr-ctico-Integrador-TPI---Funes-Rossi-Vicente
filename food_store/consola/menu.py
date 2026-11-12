@@ -73,7 +73,7 @@ class MenuAdministrador(Menu):
 {VERDE}4.{AZUL} Eliminar{RESET}
 {ROJO}0.{AZUL} Volver{RESET}""")
                     try:
-                        seleccion = input_seleccion("Seleccione: ")
+                        seleccion = input_seleccion(f"{AMARILLO}Seleccione: {RESET}")
                         match seleccion:
                             case 1 | "1" | "uno" | "i" | "listar":
                                 self.categoria_servicio.listar_categoria()
@@ -89,7 +89,7 @@ class MenuAdministrador(Menu):
                                 _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
                                 self.categoria_servicio.eliminar_categoria(_id, self.pedido_servicio)
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
-                                print("Regresando...")
+                                print(f"{ROJO}Regresando...{RESET}")
                                 break
                     except FoodStoreError as e:
                         print(f"\n[Error de Negocio]: {e}")
@@ -106,7 +106,7 @@ class MenuAdministrador(Menu):
 {VERDE}5.{AZUL} Asignar una categoria a un producto{RESET}
 {ROJO}0.{AZUL} Volver{RESET}""")
                     try:
-                        seleccion = input_seleccion("Seleccione: ")
+                        seleccion = input_seleccion(f"{AMARILLO}Seleccione: {RESET}")
                         match seleccion:
                             case 1 | "1" | "uno" | "i" | "listar":
                                 listar_producto_admin(self.producto_servicio)
@@ -129,7 +129,7 @@ class MenuAdministrador(Menu):
                                 _id = input_int("Escriba el ID del producto que desea buscar: ", "ID del producto")
                                 asignar_categoria(_id, self.producto_servicio, self.pedido_servicio, self.categoria_servicio)
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
-                                print("Regresando...")
+                                print(f"{ROJO}Regresando...{RESET}")
                                 break
                             case _:
                                 print("Ingrese una opcion mostrada en pantalla.")
