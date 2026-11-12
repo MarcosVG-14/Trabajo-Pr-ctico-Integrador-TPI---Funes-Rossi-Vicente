@@ -52,12 +52,12 @@ class MenuAdministrador(Menu):
 
     def mostrar(self) -> bool:
         print(f"\n=== FOOD STORE ADMINISTRADOR ({self.usuario.nombre} {self.usuario.apellido}) ===")
-        print("1. Categorías")
-        print("2. Productos")
-        print("3. Usuarios")
-        print("4. Pedidos")
-        print("9. Cerrar sesión")
-        print("0. Salir")
+        print(f"{VERDE}1.{AZUL} Categorías{RESET}")
+        print(f"{VERDE}2.{AZUL} Productos{RESET}")
+        print(f"{VERDE}3.{AZUL} Usuarios{RESET}")
+        print(f"{VERDE}4.{AZUL} Pedidos{RESET}")
+        print(f"{VERDE}9.{AZUL} Cerrar sesión{RESET}")
+        print(f"{ROJO}0.{AZUL} Salir{RESET}")
         
         opcion = input("Seleccione una opción: ").strip()
         
@@ -66,12 +66,12 @@ class MenuAdministrador(Menu):
                 return "salir"
             case "1":
                 while True:
-                    print("""--- CATEGORÍAS ---
-1. Listar
-2. Crear
-3. Editar
-4. Eliminar
-0. Volver""")
+                    print(f"""--- CATEGORÍAS ---
+{VERDE}1.{AZUL} Listar{RESET}
+{VERDE}2.{AZUL} Crear{RESET}
+{VERDE}3.{AZUL} Editar{RESET}
+{VERDE}4.{AZUL} Eliminar{RESET}
+{ROJO}0.{AZUL} Volver{RESET}""")
                     try:
                         seleccion = input_seleccion("Seleccione: ")
                         match seleccion:
@@ -98,13 +98,13 @@ class MenuAdministrador(Menu):
 
             case "2" | "dos":
                 while True:
-                    print("""--- PRODUCTOS ---
-1. Listar
-2. Crear
-3. Editar
-4. Eliminar
-5. Asignar una categoria a un producto
-0. Volver""")
+                    print(f"""--- PRODUCTOS ---
+{VERDE}1.{AZUL} Listar{RESET}
+{VERDE}2.{AZUL} Crear{RESET}
+{VERDE}3.{AZUL} Editar{RESET}
+{VERDE}4.{AZUL} Eliminar{RESET}
+{VERDE}5.{AZUL} Asignar una categoria a un producto{RESET}
+{ROJO}0.{AZUL} Volver{RESET}""")
                     try:
                         seleccion = input_seleccion("Seleccione: ")
                         match seleccion:
@@ -319,12 +319,12 @@ Rol: {self.usuario.rol.name}
                         limpiado_consola()
             case "4" | "cuatro":
                 while True:
-                    print("""--- GESTIÓN DE PEDIDOS ---
-1. Listar todos los pedidos
-2. Crear nuevo pedido
-3. Cambiar estado de pedido
-4. Eliminar pedido (Baja lógica)
-0. Volver""")
+                    print(f"""--- GESTIÓN DE PEDIDOS ---
+{VERDE}1.{AZUL} Listar todos los pedidos{RESET}
+{VERDE}2.{AZUL} Crear nuevo pedido{RESET}
+{VERDE}3.{AZUL} Cambiar estado de pedido{RESET}
+{VERDE}4.{AZUL} Eliminar pedido (Baja lógica){RESET}
+{ROJO}0.{AZUL} Volver{RESET}""")
                     try:
                         seleccion = input("Seleccione: ").strip()
                         match seleccion:
@@ -419,12 +419,12 @@ class MenuCliente(Menu):
 
     def mostrar(self) -> bool:
         print(f"\n=== FOOD STORE CLIENTE ({self.usuario.nombre} {self.usuario.apellido}) ===")
-        print("1. Ver categorías")
-        print("2. Ver productos disponibles")
-        print("3. Mis pedidos")
-        print("4. Mis datos")
-        print("9. Cerrar sesión")
-        print("0. Salir")
+        print(f"{VERDE}1.{AZUL} Ver categorías{RESET}")
+        print(f"{VERDE}2.{AZUL} Ver productos disponibles{RESET}")
+        print(f"{VERDE}3.{AZUL} Mis pedidos{RESET}")
+        print(f"{VERDE}4.{AZUL} Mis datos{RESET}")
+        print(f"{VERDE}9.{AZUL} Cerrar sesión{RESET}")
+        print(f"{ROJO}0.{AZUL} Salir{RESET}")
         
         opcion = input("Seleccione una opción: ").strip()
         
