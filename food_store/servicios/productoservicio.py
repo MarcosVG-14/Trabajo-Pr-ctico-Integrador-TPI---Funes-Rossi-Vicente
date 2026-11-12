@@ -158,35 +158,37 @@ def crear_producto(nombre: str, precio: float, descripcion: str, stock: int, ima
     productoservicio.agregar_producto(producto)
     return (f"Se creo el producto en la lista. ID generado: {producto.id}")
 
-def editar_producto(_id, productoservicio, pedido):
+def editar_producto(_id, productoservicio, pedido_servicio=None):
     encontrado = False
     for i in productoservicio.productos:
         if _id == i.id:
             encontrado = True
-            print("Se encontro un producto con ese ID") # nombre: str, precio: float, descripcion: str, stock: int, imagen: str, disponible: bool
+            print("Se encontro un producto con ese ID")
             nombre_nuevo = input_str("Escriba el nuevo nombre del producto: ", "Nombre")
             precio_nuevo = input_float("Escriba el nuevo precio del producto: ", "Precio")
             descripcion_nueva = input_str("Escriba la nueva descripción del producto: ", "Descripción")
             stock_nuevo = input_int("Escriba el nuevo stock del producto: ", "Stock")
             imagen_nueva = input_str("Escriba el nuevo url de la imagen del producto: ", "URL de la imagen")
             disponible_nuevo = input_bool("¿El producto sigue estando disponible?: ")
-            nombre_viejo = i.nombre
+            
             i.nombre = nombre_nuevo.capitalize()
             i.precio = precio_nuevo
             i.descripcion = descripcion_nueva.capitalize()
             i.stock = stock_nuevo
             i.imagen = imagen_nueva
             i.disponible = disponible_nuevo
-            for f in pedido.detalles:
-                if f.producto:
-                    if f.producto.nombre == nombre_viejo:
-                        f.producto = i
+            
+            if pedido_servicio is not None:
+                for pedido in pedido_servicio.pedidos:
+                    for f in pedido.detalles:
+                        if f.producto and f.producto.id == i.id:
+                            f._DetallePedido__producto = i 
     if encontrado:
-        print("¡Categoria editada!")
-    if not encontrado:
-        raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
+        print("¡Producto editado con éxito!")
+    else:
+        raise EntidadNoEncontradaError("No se encontro ningun producto con ese ID")
 
-def eliminar_categoria(_id, productoservicio, pedido):
+def eliminar_producto(_id, productoservicio, pedido_servicio=None):
     encontrado = False
     for i in productoservicio.productos:
         if _id == i.id:
@@ -198,10 +200,11 @@ def eliminar_categoria(_id, productoservicio, pedido):
                     case "S" | "s":
                         id_viejo = i.id
                         productoservicio.productos.remove(i)
-                        for f in pedido.detalles:
-                            if f.producto:
-                                if f.producto.id == id_viejo:
-                                    f.producto = None
+                        if pedido_servicio is not None:
+                            for f in pedido_servicio.pedidos:
+                                for det in f.detalles:
+                                    if det.producto and det.producto.id == id_viejo:
+                                        det.producto = None
                         print("Eliminacion completada.")
                         break
                     case "N" | "n":
@@ -210,6 +213,4 @@ def eliminar_categoria(_id, productoservicio, pedido):
                     case _:
                         print("Escriba S o N.")
     if not encontrado:
-        raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
-
-productoservicio1 = Productoservicio()
+        raise EntidadNoEncontradaError("No se encontro ningun producto con ese ID")

@@ -1,8 +1,10 @@
-
 import getpass
 from entidades.usuario import Usuario
 from enums.enums import Rol
 from servicios.usuario_servicio import UsuarioServicio
+from servicios.categoriaservicio import Categoriaservicio
+from servicios.productoservicio import Productoservicio
+from servicios.pedido_servicio import PedidoServicio
 from excepciones.excepciones import CredencialesInvalidasError
 from consola.menu import crear_menu
 
@@ -29,6 +31,10 @@ def inicializar_datos(usuario_servicio: UsuarioServicio) -> None:
 
 def main() -> None:
     usuario_servicio = UsuarioServicio()
+    categoria_servicio = Categoriaservicio()
+    producto_servicio = Productoservicio()
+    pedido_servicio = PedidoServicio()
+
     inicializar_datos(usuario_servicio)
     
     ejecutando_sistema = True
@@ -55,7 +61,7 @@ def main() -> None:
             ejecutando_sistema = False
             break
         
-        menu = crear_menu(sesion_activa)
+        menu = crear_menu(sesion_activa, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio)
         mantiene_sesion = True
 
         while mantiene_sesion:

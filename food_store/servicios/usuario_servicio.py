@@ -37,17 +37,17 @@ class UsuarioServicio:
     def crear_usuario(self, nombre:str, apellido:str, mail:str, celular:str, contrasenia:str, rol:int) -> None:
         '''Función de administrador para crear un usuario'''
         if not isinstance(nombre, str):
-            raise TypeError("El nombre debe ser una cadena de texto.")
+            raise DatoInvalidoError("El nombre debe ser una cadena de texto.")
         if not isinstance(apellido, str):
-            raise TypeError("El apellido debe ser una cadena de texto.")
+            raise DatoInvalidoError("El apellido debe ser una cadena de texto.")
         if not isinstance(mail, str):
-            raise TypeError("El mail debe ser una cadena de texto.")
+            raise DatoInvalidoError("El mail debe ser una cadena de texto.")
         if not isinstance(celular, str):
-            raise TypeError("El celular debe ser una cadena de texto.")
+            raise DatoInvalidoError("El celular debe ser una cadena de texto.")
         if not isinstance(contrasenia, str):
-            raise TypeError("El contraseña debe ser una cadena de texto.")
+            raise DatoInvalidoError("La contraseña debe ser una cadena de texto.")
         if "@" not in mail or "." not in mail:
-            raise TypeError("El mail debe contener '@' y '.'")
+            raise DatoInvalidoError("El mail debe contener '@' y '.'")
         for usuario in self.__usuarios:
             if usuario.mail.lower() == mail.lower():
                 raise ValueError("Ya existe un usuario registrado con ese mail.")
@@ -57,7 +57,7 @@ class UsuarioServicio:
         elif rol == 2:
             rol_enum = Rol.USUARIO
         else:
-            raise TypeError("El rol seleccionado es inválido.")
+            raise DatoInvalidoError("El rol seleccionado es inválido.")
         nuevo_usuario = Usuario(
             nombre=nombre,
             apellido=apellido,
