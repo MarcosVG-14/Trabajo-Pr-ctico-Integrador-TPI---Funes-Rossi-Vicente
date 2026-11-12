@@ -1,30 +1,29 @@
 from abc import ABC, abstractmethod
 from entidades.usuario import Usuario
-from enums.enums import Rol, Estado, FormaPago
-from servicios.categoriaservicio import listar, crear_categoria, editar_categoria, eliminar_categoria, input_seleccion, input_str, input_int
-from excepciones.excepciones import OperacionNoPermitidaError, StockInsuficienteError, DatoInvalidoError
+from enums.enums import Rol
+from servicios.categoriaservicio import *
+from servicios.productoservicio import *
+from servicios.usuario_servicio import *
 
 class Menu(ABC):
     def __init__(self, usuario: Usuario) -> None:
         self.__usuario: Usuario = usuario
-    
     @property
     def usuario(self) -> Usuario:
         return self.__usuario
 
     @abstractmethod
     def mostrar(self) -> bool:
+        """
+        Muestra las opciones del menú y procesa la entrada del usuario.
+        Retorna:
+            True  -> Si el usuario elige "Cerrar sesión" (vuelve al login)
+            False -> Si el usuario elige "Salir" (finaliza el programa)
+        """
         pass
 
 
 class MenuAdministrador(Menu):
-    def __init__(self, usuario: Usuario, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio) -> None:
-        super().__init__(usuario)
-        self.categoria_servicio = categoria_servicio
-        self.producto_servicio = producto_servicio
-        self.usuario_servicio = usuario_servicio
-        self.pedido_servicio = pedido_servicio
-
     def mostrar(self) -> bool:
         print(f"\n=== FOOD STORE ADMINISTRADOR ({self.usuario.nombre} {self.usuario.apellido}) ===")
         print("1. Categorías")
@@ -38,7 +37,7 @@ class MenuAdministrador(Menu):
         
         match opcion:
             case "0":
-                return "salir"
+                return "Saliendo del menú..."
             case "1":
                 while True:
                     print("""--- CATEGORÍAS ---
@@ -50,22 +49,53 @@ class MenuAdministrador(Menu):
                     seleccion = input_seleccion("Seleccione: ")
                     match seleccion:
                         case 1 | "1" | "uno" | "i" | "listar":
-                            listar(self.categoria_servicio)
+                            listar_categoria(categoriaservicio1)
                         case 2 | "2" | "dos" | "ii" | "crear":
                             nombre = input_str("Escriba el nombre de la categoria: ", "Nombre")
                             descripcion = input_str("Escriba la descripción de la categoria: ", "Descripción")
-                            crear_categoria(nombre, descripcion, self.categoria_servicio)
-                            print("¡Categoría creada con éxito!")
+                            crear_categoria(nombre, descripcion, categoriaservicio1)
                         case 3 | "3" | "tres" | "iii" | "editar":
                             _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
-                            editar_categoria(_id, self.categoria_servicio, self.pedido_servicio)
+                            editar_categoria(_id, categoriaservicio1, pedido1)
                         case 4 | "4" | "cuatro" | "iv" | "eliminar":
                             _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
-                            eliminar_categoria(_id, self.categoria_servicio, self.pedido_servicio)
+                            eliminar_categoria(_id, categoriaservicio1, pedido1)
                         case 0 | "0" | "cero" | "o" | "zero" | "volver":
                             print("Regresando...")
                             break
-            
+
+            case "2" | "dos":
+                while True:
+                    print("""--- PRODUCTOS ---
+1. Listar
+2. Crear
+3. Editar
+4. Eliminar
+0. Volver""")
+                    seleccion = input_seleccion("Seleccione: ")
+                    match seleccion:
+                        case 1 | "1" | "uno" | "i" | "listar":
+                            listar_producto_admin(productoservicio1)
+                        case 2 | "2" | "dos" | "ii" | "crear":
+                            nombre = input_str("Escriba el nombre del nuevo producto: ", "Nombre")
+                            precio = input_float("Escriba el precio del nuevo producto: ", "Precio")
+                            descripcion = input_str("Escriba la descripcion del nuevo producto: ", "Descripcion")
+                            stock = input_int("Escriba el stock inicial del nuevo producto: ", "Stock")
+                            imagen = input_str("Ingrese el url de la imagen del producto: ", "Imagen")
+                            disponible = input_bool("¿El producto esta disponible?: ")
+                            crear_producto(nombre, precio, descripcion, stock, imagen, disponible, productoservicio1)
+                        case 3 | "3" | "tres" | "iii" | "editar":
+                            _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
+                            editar_producto(_id, productoservicio1, pedido1)
+                        case 4 | "4" | "cuatro" | "iv" | "eliminar":
+                            _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
+                            eliminar_categoria(_id, productoservicio1, pedido1)
+                        case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                            print("Regresando...")
+                            break
+                        case _:
+                            print("Ingrese una opcion mostrada en pantalla.")
+
             case "3" | "tres":
                 while True:
                     print("""--- USUARIOS ---
@@ -74,111 +104,333 @@ class MenuAdministrador(Menu):
 3. Editar
 4. Eliminar
 0. Volver""")
-                    seleccion = input("Seleccione: ").strip()
+                    seleccion = input("Seleccione: ")
                     match seleccion:
                         case "1" | "uno" | "i" | "listar":
-                            usuarios = self.usuario_servicio.usuarios_activos()
-                            if not usuarios:
-                                print("No hay usuarios cargados.")
-                            else:
-                                for usuario in usuarios:
-                                    print(f"Id: {usuario.id} | {usuario.nombre} {usuario.apellido} | Mail: {usuario.mail} | Rol: {usuario.rol.name}")
+                                usuarios = usuario_servicio.usuarios_activos()
+                                if not usuarios:
+                                    print("No hay usuarios cargados.")
+                                else:
+                                    for usuario in usuarios:
+                                        print(f"""Id: {usuario.id}
+Nombre: {usuario.nombre}
+Apellido: {usuario.apellido}
+Mail: {usuario.mail}
+Rol: {usuario.rol.name}
+-------------------------""")
                         case "2" | "dos" | "ii" | "crear":
-                            nombre = input("Ingrese el nombre: ").strip()
-                            apellido = input("Ingrese el apellido: ").strip()
-                            mail = input("Ingrese el mail: ").strip()
-                            celular = input("Ingrese el celular: ").strip()
-                            contrasenia = input("Ingrese la contraseña: ").strip()
-                            rol = int(input("Ingrese rol (1 = Admin | 2 = Usuario): ").strip())
-                            self.usuario_servicio.crear_usuario(nombre, apellido, mail, celular, contrasenia, rol)
-                            print("Usuario creado exitosamente.")
-                        case "4" | "cuatro" | "iv" | "eliminar":
-                            _id = input_int("Escriba el ID del usuario: ", "ID")
-                            usuario_a_borrar = self.usuario_servicio.buscar_por_id(_id)
-                            if usuario_a_borrar.id == self.usuario.id:
-                                raise OperacionNoPermitidaError("No puedes borrarte a tí mismo.")
-                            if input(f"¿Dar baja lógica a {usuario_a_borrar.nombre}? (S/N): ").strip().lower() == "s":
-                                self.usuario_servicio.eliminar_usuario(_id)
-                                print(f"Usuario {_id} eliminado.")
-                        case 0 | "0" | "cero" | "o" | "zero" | "volver":
-                            break
-
-            case "4" | "cuatro":
-                while True:
-                    print("""--- GESTIÓN DE PEDIDOS ---
-1. Listar todos los pedidos
-2. Crear nuevo pedido
-3. Cambiar estado de pedido
-4. Eliminar pedido (Baja lógica)
-0. Volver""")
-                    seleccion = input("Seleccione: ").strip()
-                    match seleccion:
-                        case "1":
-                            pedidos = self.pedido_servicio.listar_pedidos_activos()
-                            if not pedidos:
-                                print("No hay pedidos registrados.")
-                            else:
-                                for p in pedidos:
-                                    print(p)
-                                    print("  Detalles:")
-                                    for d in p.detalles:
-                                        print(f"   - {d.producto.name if hasattr(d.producto, 'name') else d.producto.nombre} x {d.cantidad} (Subtotal: ${d.subtotal:.2f})")
-                                    print("-" * 40)
-                        case "2":
-                            print("\n--- CREAR PEDIDO ---")
-                            id_usu = input_int("Ingrese el ID del usuario cliente: ", "ID Usuario")
-                            usu = self.usuario_servicio.buscar_por_id(id_usu)
-                            
-                            print("\nFormas de pago disponibles:")
-                            print("1. TARJETA\n2. TRANSFERENCIA\n3. EFECTIVO")
-                            op_pago = input_int("Seleccione forma de pago (1-3): ", "Opción")
-                            forma_pago = FormaPago.TARJETA if op_pago == 1 else (FormaPago.TRANSFERENCIA if op_pago == 2 else FormaPago.EFECTIVO)
-                            
-                            items = []
                             while True:
-                                print("\nProductos disponibles:")
-                                for prod in self.producto_servicio:
-                                    if not prod.eliminado and prod.disponible:
-                                        print(f"ID: {prod.id} | {prod.nombre} - Precio: ${prod.precio} - Stock: {prod.stock}")
-                                
-                                id_prod = input_int("Ingrese el ID del producto (0 para terminar): ", "ID Producto")
-                                if id_prod == 0:
-                                    break
-                                
-                                prod_encontrado = None
-                                for prod in self.producto_servicio:
-                                    if prod.id == id_prod and not prod.eliminado:
-                                        prod_encontrado = prod
+                                nombre = input("Ingrese el nombre del usuario: ").strip()
+                                apellido = input("Ingrese el apellido del usuario: ").strip()
+                                mail = input("Ingrese el mail del usuario: ").strip()
+                                celular = input("Ingrese el celular del usuario: ").strip()
+                                contrasenia = input("Ingrese el contraseña del usuario: ").strip()
+                                rol = input("Ingrese el rol del usuario (1 = Admin | 2 = Usuario): ").strip()
+                                nuevo_usuario = usuario_servicio.crear_usuario(nombre, apellido, mail, celular, contrasenia, rol)
+                                print(f"Usuario creado exitosamente. ID asignado: {nuevo_usuario.id}")
+                                break
+                        case "3" | "tres" | "iii" | "editar":
+                            _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
+                            usuario_a_editar = usuario_servicio.buscar_por_id(_id)
+                            while True:
+                                opcion = input(f""" - Usted accedó al Usuario de ID {_id} - {usuario_a_editar.nombre} {usuario_a_editar.apellido} - 
+¿Qué valor le gustaría actualizar?
+
+1- Nombre
+2- Apellido
+3- Mail
+4- Celular
+5- Contraseña
+6- Rol
+7- Todos
+8- Salir
+
+
+Seleccione una opción: """)
+                                match opcion:
+                                    case "1" | "uno" | "i" | "nombre":
+                                        nuevo_nombre = input_str("Ingrese el nuevo nombre: ", "Nombre")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_nombre(usuario_a_editar, nuevo_nombre)
+                                                    print("Nombre de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                    case "2" | "dos" | "ii" | "apellido":
+                                        nuevo_apellido = input_str("Ingrese el nuevo apellido: ", "Apellido")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_apellido(usuario_a_editar, nuevo_apellido)
+                                                    print("Apellido de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                    case "3" | "tres" | "iii" | "mail":
+                                        nuevo_mail = input_str("Ingrese el nuevo mail: ", "Mail")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    try: 
+                                                        usuario_servicio.cambio_mail(usuario_a_editar, nuevo_mail)
+                                                        print("Mail de usuario cambiado.")
+                                                    except TypeError as e:
+                                                        print(e)
+                                                        break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                    case "4" | "cuatro" | "iv" | "celular":
+                                        nuevo_celular = input_str("Ingrese el nuevo celular: ", "Celular")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_celular(usuario_a_editar, nuevo_celular)
+                                                    print("Celular de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                    case "5" | "cinco" | "v" | "contraseña":
+                                        nueva_contrasenia = input_str("Ingrese la nueva contraseña: ", "Contraseña")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_contrasenia(usuario_a_editar, nueva_contrasenia)
+                                                    print("Contraseña de usuario cambiada.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                    case "6" | "seis" | "vi" | "rol":
+                                        nuevo_rol = input_str("Ingrese el nuevo rol: ", "Rol")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                    print("Rol de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                    case "7" | "siete" | "vii" | "todos":
+                                        nuevo_nombre = input_str("Ingrese el nuevo nombre: ", "Nombre")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_nombre(usuario_a_editar, nuevo_nombre)
+                                                    print("Nombre de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                        nuevo_apellido = input_str("Ingrese el nuevo apellido: ", "Apellido")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_apellido(usuario_a_editar, nuevo_apellido)
+                                                    print("Apellido de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                        nuevo_mail = input_str("Ingrese el nuevo mail: ", "Mail")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    try: 
+                                                        usuario_servicio.cambio_mail(usuario_a_editar, nuevo_mail)
+                                                        print("Mail de usuario cambiado.")
+                                                    except TypeError as e:
+                                                        print(e)
+                                                        break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                        nuevo_celular = input_str("Ingrese el nuevo celular: ", "Celular")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_celular(usuario_a_editar, nuevo_celular)
+                                                    print("Celular de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                        nueva_contrasenia = input_str("Ingrese la nueva contraseña: ", "Contraseña")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_contrasenia(usuario_a_editar, nueva_contrasenia)
+                                                    print("Contraseña de usuario cambiada.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                        nuevo_rol = input_str("Ingrese el nuevo rol: ", "Rol")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                    print("Rol de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                                        nuevo_rol = input_str("Ingrese el nuevo rol: ", "Rol")
+                                        while True:
+                                            confirmacion = input("""¿Estás seguro de hacer este cambio?
+- SI 
+- NO
+
+- """)
+                                            match confirmacion:
+                                                case "si" | "SI" | "Si":
+                                                    usuario_servicio.cambio_rol(usuario_a_editar, nuevo_rol)
+                                                    print("Rol de usuario cambiado.")
+                                                    break
+                                                case "no" | "NO" | "No":
+                                                    print("Acción cancelada.")
+                                                    break
+                                                case _:
+                                                    print("Error... Comando incorrecto")
+                                            break
+                        case "4" | "cuatro" | "iv" | "eliminar":
+                            _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
+                            try:
+                                usuario_a_borrar = usuario_servicio.buscar_por_id(_id)
+                            except Exception:
+                                print(f"El ID {_id} no fue encontrado en la lista.")
+                                continue
+                            if usuario_a_borrar.id == self.usuario.id:
+                                print("No puedes darte de baja a ti mismo.")
+                                continue
+                            while True:
+                                confirmacion = input(f"¿Estás seguro de dar la baja lógica al usuario {usuario_a_borrar.nombre} {usuario_a_borrar.apellido}? (Si/No): ").strip()
+                                match confirmacion:
+                                    case "si" | "SI" | "Si" | "s" | "S":
+                                        usuario_servicio.eliminar_usuario(_id)
+                                        print(f"Se eliminó al usuario de ID '{_id}' exitosamente.")
                                         break
-                                
-                                if not prod_encontrado:
-                                    print("Producto no encontrado.")
-                                    continue
-                                
-                                cant = input_int(f"Ingrese la cantidad para '{prod_encontrado.nombre}': ", "Cantidad")
-                                items.append((cant, prod_encontrado))
-                            
-                            if items:
-                                nuevo_ped = self.pedido_servicio.crear_pedido(usu, forma_pago, items)
-                                print(f"¡Pedido creado con éxito! ID: {nuevo_ped.id} | Total: ${nuevo_ped.total:.2f}")
+                                    case "no" | "NO" | "No" | "n" | "N":
+                                        print("Acción cancelada.")
+                                        break
+                                    case _:
+                                        print("Error... Comando incorrecto.")
+                        case "5" | "cinco" | "v" | "datos":
+                            _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
+                            usuario = usuario_servicio.buscar_por_id(_id)
+                            if usuario:
+                                print(f"""Id: {usuario.id}
+Nombre: {usuario.nombre}
+Apellido: {usuario.apellido}
+Mail: {usuario.mail}
+Rol: {usuario.rol.name}
+-------------------------""")
                             else:
-                                print("No se agregaron items, pedido cancelado.")
-                        case "3":
-                            id_ped = input_int("Ingrese el ID del pedido a actualizar: ", "ID Pedido")
-                            print("\nNuevos estados:")
-                            print("1. PENDIENTE\n2. CONFIRMADO\n3. TERMINADO\n4. CANCELADO")
-                            op_est = input_int("Seleccione nuevo estado (1-4): ", "Opción")
-                            nuevo_estado = (Estado.PENDIENTE if op_est == 1 else 
-                                            Estado.CONFIRMADO if op_est == 2 else 
-                                            Estado.TERMINADO if op_est == 3 else Estado.CANCELADO)
-                            self.pedido_servicio.cambiar_estado(id_ped, nuevo_estado)
-                            print("¡Estado del pedido actualizado con éxito!")
-                        case "4":
-                            id_ped = input_int("Ingrese el ID del pedido a eliminar: ", "ID Pedido")
-                            if input("¿Confirma la baja lógica del pedido? (S/N): ").strip().lower() == "s":
-                                self.pedido_servicio.eliminar_pedido(id_ped)
-                                print("Pedido eliminado correctamente.")
-                        case "0":
+                                print(f"El ID {usuario} no fue encontrado en la lista.")
+                        case "0" | "cero" | "o" | "zero" | "volver":
+                            print("Regresando...")
                             break
 
             case "9":
@@ -186,17 +438,10 @@ class MenuAdministrador(Menu):
 
             case _:
                 print("Opción no válida.")
-        return True
+                return True
 
 
 class MenuCliente(Menu):
-    def __init__(self, usuario: Usuario, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio) -> None:
-        super().__init__(usuario)
-        self.categoria_servicio = categoria_servicio
-        self.producto_servicio = producto_servicio
-        self.usuario_servicio = usuario_servicio
-        self.pedido_servicio = pedido_servicio
-
     def mostrar(self) -> bool:
         print(f"\n=== FOOD STORE CLIENTE ({self.usuario.nombre} {self.usuario.apellido}) ===")
         print("1. Ver categorías")
@@ -211,55 +456,46 @@ class MenuCliente(Menu):
         match opcion:
             case "0":
                 return "salir"
-            case "1":
-                listar(self.categoria_servicio)
-            case "2":
-                print("\n--- PRODUCTOS DISPONIBLES ---")
-                encontrado = False
-                for p in self.producto_servicio:
-                    if not p.eliminado and p.disponible and p.stock > 0:
-                        encontrado = True
-                        print(f"ID: {p.id} | {p.nombre} - ${p.precio} | Stock: {p.stock} | Desc: {p.descripcion}")
-                if not encontrado:
-                    print("No hay productos disponibles en este momento.")
-            case "3":
+
+            case "1" | "uno":
                 while True:
-                    print(f"\n--- MIS PEDIDOS ({self.usuario.nombre}) ---")
-                    mis_pedidos = self.pedido_servicio.listar_pedidos_por_usuario(self.usuario)
-                    if not mis_pedidos:
-                        print("No tenés pedidos registrados.")
-                        break
-                    for p in mis_pedidos:
-                        print(f"ID: {p.id} | Fecha: {p.fecha} | Estado: {p.estado.name} | Pago: {p.forma_pago.name} | Total: ${p.total:.2f}")
-                    
-                    id_elegido = input_int("Ingrese el ID de un pedido para ver sus detalles (0 para volver): ", "ID")
-                    if id_elegido == 0:
-                        break
-                    
-                    encontrado = False
-                    for p in mis_pedidos:
-                        if p.id == id_elegido:
-                            encontrado = True
-                            print(f"\nDetalles del Pedido #{p.id}:")
-                            for d in p.detalles:
-                                print(f" - {d.producto.nombre}: {d.cantidad} un. x ${d.producto.precio} = ${d.subtotal:.2f}")
-                            print(f"TOTAL: ${p.total:.2f}")
-                    if not encontrado:
-                        print("El ID ingresado no corresponde a ninguno de tus pedidos.")
-            case "4":
-                print(f"\n--- MIS DATOS ---")
-                print(f"Nombre: {self.usuario.nombre} {self.usuario.apellido}")
-                print(f"Mail: {self.usuario.mail}")
-                print(f"Celular: {self.usuario.celular}")
-                print(f"Rol: {self.usuario.rol.name}")
+                    print("""--- CATEGORÍAS ---
+1. Listar
+0. Volver""")
+                    seleccion = input_seleccion("Seleccione: ")
+                    match seleccion:
+                        case 1 | "1" | "uno" | "i" | "listar":
+                            if sesion_activa.rol.value == "Admin" or sesion_activa.rol.value == "Usuario":
+                                listar(categoriaservicio1)
+                        case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                            print("Regresando...")
+                            break
+
+            case "2" | "dos":
+                while True:
+                    print("""--- PRODUCTOS ---
+1. Listar
+0. Volver""")
+                    seleccion = input_seleccion("Seleccione: ")
+                    match seleccion:
+                        case 1 | "1" | "uno" | "i" | "listar":
+                            listar_producto_cliente(productoservicio1)
+                        case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                            print("Regresando...")
+                            break
+                        case _:
+                            print("Ingrese una opcion mostrada en pantalla.")
+
             case "9":
+                print("Cerrando sesión de cliente...")
                 return False
+
             case _:
                 print("Opción no válida.")
-        return True
+                return True
 
-
-def crear_menu(usuario: Usuario, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio) -> Menu:
+def crear_menu(usuario: Usuario) -> Menu:
+    """instancia el menú correcto según el rol de forma polimórfica."""
     if usuario.rol == Rol.ADMIN:
-        return MenuAdministrador(usuario, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio)
-    return MenuCliente(usuario, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio)
+        return MenuAdministrador(usuario)
+    return MenuCliente(usuario)

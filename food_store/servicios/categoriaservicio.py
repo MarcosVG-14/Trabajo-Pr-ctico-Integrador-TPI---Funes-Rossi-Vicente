@@ -23,7 +23,12 @@ class Categoriaservicio:
         return categoria in self._categorias
 
     def agregar_categoria(self, categoria):
-        self._categorias.append(categoria) 
+        if self._categorias:
+            for i in self._productos:
+                if i.id == producto.id:
+                    return ("Esta categoria ya esta en la lista.")
+        self.categorias.append(categoria)
+        return ("Se agrego la categoria en la lista.")
 
 def input_seleccion(mensaje):
     while True:
@@ -54,11 +59,13 @@ def input_int(mensaje, que_es):
             input_salid = int(input(mensaje))
         except:
             raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
+        if not (isinstance(input_salid, int) or isinstance(input_salid, float)):
+            raise DatoInvalidoError(f"{que_es} debe de ser un valor numerico.")
         if 0 > input_salid:
             raise DatoInvalidoError(f"{que_es} no puede ser menor a cero. ")
         return input_salid
 
-def listar(categoriaservicio):
+def listar_categoria(categoriaservicio):
     encontrado = False
     for i in categoriaservicio.categorias:
         if i and not i.eliminado:
@@ -67,11 +74,16 @@ def listar(categoriaservicio):
     if not encontrado:
         raise EntidadNoEncontradaError("No hay categorias cargadas.")
 
-def crear_categoria(nombre:str, descripcion:str, categoriaservicio):
+def crear_categoria(nombre, descripcion, categoriaservicio):
     categoria = Categoria(nombre, descripcion)
+    if categoriaservicio.categorias:
+        for i in categoriaservicio.categorias:
+            if i.id == categoria.id:
+                return ("Esta categoria ya esta en la lista.")
     categoriaservicio.agregar_categoria(categoria)
+    return (f"Se creo la categoria en la lista. ID generado: {categoria.id}")
 
-def editar_categoria(_id, categoriaservicio, pedido_servicio=None):
+def editar_categoria(_id, categoriaservicio, pedido=None):
     encontrado = False
     for i in categoriaservicio.categorias:
         if _id == i.id and not i.eliminado:
@@ -82,19 +94,17 @@ def editar_categoria(_id, categoriaservicio, pedido_servicio=None):
             nombre_viejo = i.nombre
             i.nombre = nombre_nuevo.capitalize()
             i.descripcion = descripcion_nueva.capitalize()
-            
-            if pedido_servicio is not None:
-                for pedido in pedido_servicio.pedidos:
-                    for f in pedido.detalles:
-                        if f.producto and f.producto.categoria:
-                            if f.producto.categoria.nombre == nombre_viejo:
-                                f.producto.categoria = i
+            if pedido:
+                for f in pedido.detalles:
+                    if f.producto and f.producto.categoria:
+                        if f.producto.categoria.nombre == nombre_viejo:
+                            f.producto.categoria = i
     if encontrado:
         print("¡Categoria editada!")
     else:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
 
-def eliminar_categoria(_id, categoriaservicio, pedido_servicio=None):
+def eliminar_categoria(_id, categoriaservicio, pedido=None):
     encontrado = False
     for i in categoriaservicio.categorias:
         if _id == i.id and not i.eliminado:
@@ -106,16 +116,19 @@ def eliminar_categoria(_id, categoriaservicio, pedido_servicio=None):
                     case "s":
                         id_viejo = i.id
                         i.eliminado = True
-                        if pedido_servicio is not None:
-                            for pedido in pedido_servicio.pedidos:
-                                for f in pedido.detalles:
-                                    if f.producto and f.producto.categoria:
-                                        if f.producto.categoria.id == id_viejo:
-                                            f.producto.categoria = None
+                        if pedido is not None:
+                            for f in pedido.detalles:
+                                if f.producto and f.producto.categoria:
+                                    if f.producto.categoria.id == id_viejo:
+                                        f.producto.categoria = None
                         print("Eliminacion completada.")
                         break
                     case "n":
                         print("Se cancelo la eliminacion, regresando...")
                         break
+                    case _:
+                        print("Escriba S o N.")
     if not encontrado:
         raise EntidadNoEncontradaError("No se encontro ninguna categoria con ese ID")
+
+categoriaservicio1 = Categoriaservicio()
