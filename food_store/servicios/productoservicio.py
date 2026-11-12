@@ -214,3 +214,23 @@ def eliminar_producto(_id, productoservicio, pedido_servicio=None):
                         print("Escriba S o N.")
     if not encontrado:
         raise EntidadNoEncontradaError("No se encontro ningun producto con ese ID")
+
+def asignar_categoria(_id, productoservicio, pedido_servicio, categoriaservicio):
+    encontrado = False
+    for i in productoservicio.productos:
+        if _id == i.id:
+            encontrado = True
+            print("Se encontro el producto con ese ID")
+            _id_catego = input_int("Ingrese el ID de la categoria para asignar: ", "ID de la categoria")
+            for f in categoriaservicio.categorias:
+                if _id_catego == f.id:
+                    print("Se encontro la categoria con ese ID")
+                    i.agregar_categoria(f)
+                    print("Categoria asignada correctamente.")
+                    if pedido_servicio is not None:
+                        for pedido in pedido_servicio.pedidos:
+                            for n in pedido.detalles:
+                                if n.producto and n.producto.id == i.id:
+                                    n.producto.agregar_categoria = f            
+    if not encontrado:
+        raise EntidadNoEncontradaError("No se encontro ningun producto con ese ID")

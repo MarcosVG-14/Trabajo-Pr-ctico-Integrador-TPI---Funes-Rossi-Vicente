@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from entidades.usuario import Usuario
 from enums.enums import Rol, Estado, FormaPago
 from servicios.categoriaservicio import input_seleccion, input_str, input_int
-from servicios.productoservicio import listar_producto_admin, listar_producto_cliente, crear_producto, editar_producto, eliminar_producto, input_float, input_bool
+from servicios.productoservicio import listar_producto_admin, listar_producto_cliente, crear_producto, editar_producto, eliminar_producto, input_float, input_bool, asignar_categoria
 from excepciones.excepciones import FoodStoreError, OperacionNoPermitidaError
 
 class Menu(ABC):
@@ -78,6 +78,7 @@ class MenuAdministrador(Menu):
 2. Crear
 3. Editar
 4. Eliminar
+5. Asignar una categoria a un producto
 0. Volver""")
                     try:
                         seleccion = input_seleccion("Seleccione: ")
@@ -99,6 +100,9 @@ class MenuAdministrador(Menu):
                             case 4 | "4" | "cuatro" | "iv" | "eliminar":
                                 _id = input_int("Escriba el ID del producto que desea buscar: ","ID")
                                 eliminar_producto(_id, self.producto_servicio, self.pedido_servicio)
+                            case 5 | "5" | "cinco" | "v" | "asignar":
+                                _id = input_int("Escriba el ID del producto que desea buscar: ", "ID del producto")
+                                asignar_categoria(_id, self.producto_servicio, self.pedido_servicio, self.categoria_servicio)
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
                                 print("Regresando...")
                                 break
