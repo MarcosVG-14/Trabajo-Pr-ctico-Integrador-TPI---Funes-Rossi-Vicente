@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from entidades.usuario import Usuario
 from enums.enums import Rol, Estado, FormaPago
-from servicios.categoriaservicio import input_seleccion, input_str, input_int
-from servicios.productoservicio import listar_producto_admin, listar_producto_cliente, crear_producto, editar_producto, eliminar_producto, input_float, input_bool, asignar_categoria
+from servicios.categoriaservicio import input_seleccion, input_str, input_int_id
+from servicios.productoservicio import listar_producto_admin, listar_producto_cliente, crear_producto, editar_producto, eliminar_producto, input_float, input_bool, asignar_categoria, input_int
 from excepciones.excepciones import FoodStoreError, OperacionNoPermitidaError
 from consola.estetica import *
 
@@ -58,10 +58,10 @@ class MenuAdministrador(Menu):
                                 res = self.categoria_servicio.crear_categoria(nombre, descripcion)
                                 print(res)
                             case 3 | "3" | "tres" | "iii" | "editar":
-                                _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
+                                _id = input_int_id("Escriba el ID de la categoria que desea buscar: ","ID")
                                 self.categoria_servicio.editar_categoria(_id, self.pedido_servicio)
                             case 4 | "4" | "cuatro" | "iv" | "eliminar":
-                                _id = input_int("Escriba el ID de la categoria que desea buscar: ","ID")
+                                _id = input_int_id("Escriba el ID de la categoria que desea buscar: ","ID")
                                 self.categoria_servicio.eliminar_categoria(_id, self.pedido_servicio)
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
                                 print(f"{ROJO}Regresando...{RESET}")
@@ -299,7 +299,7 @@ Rol: {self.usuario.rol.name}
                                         print("-" * 40)
                             case "2":
                                 print("\n--- CREAR PEDIDO ---")
-                                id_usu = input_int("Ingrese el ID del usuario cliente: ", "ID Usuario")
+                                id_usu = input_int_id("Ingrese el ID del usuario cliente: ", "ID Usuario")
                                 usu = self.usuario_servicio.buscar_por_id(id_usu)
                                 
                                 print("\nFormas de pago disponibles:")
@@ -314,7 +314,7 @@ Rol: {self.usuario.rol.name}
                                         if not prod.eliminado and prod.disponible:
                                             print(f"ID: {prod.id} | {prod.nombre} - Precio: ${prod.precio} - Stock: {prod.stock}")
                                     
-                                    id_prod = input_int("Ingrese el ID del producto (0 para terminar): ", "ID Producto")
+                                    id_prod = input_int_id("Ingrese el ID del producto (0 para terminar): ", "ID Producto")
                                     if id_prod == 0:
                                         break
                                     

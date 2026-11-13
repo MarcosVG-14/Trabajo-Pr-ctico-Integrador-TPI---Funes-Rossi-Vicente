@@ -125,7 +125,7 @@ def input_str(mensaje, que_es):
             raise DatoInvalidoError(f"{que_es} no puede estar vacio")
         return input_salid.capitalize()
 
-def input_int(mensaje, que_es):
+def input_int_id(mensaje, que_es):
     while True:
         try:
             input_salid = int(input(mensaje))
