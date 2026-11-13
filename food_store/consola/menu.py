@@ -197,6 +197,8 @@ class MenuAdministrador(Menu):
                                     opcion_editar = input().strip()
                                     if opcion_editar == "8":
                                         editando = False
+                                        continuar()
+                                        limpiado_consola()
                                         break
                                     match opcion_editar:
                                         case "1" | "uno" | "i" | "nombre":
@@ -266,6 +268,7 @@ class MenuAdministrador(Menu):
                                             print(f"{NARANJA}Error... Comando incorrecto{RESET}")
                                             continuar()
                                             limpiado_consola()
+                                        
                             case "4" | "cuatro" | "iv" | "eliminar":
                                 _id = input_int(f"{AMARILLO}Escriba el ID del usuario: {RESET}", "ID")
                                 usuario_a_borrar = self.usuario_servicio.buscar_por_id(_id)
