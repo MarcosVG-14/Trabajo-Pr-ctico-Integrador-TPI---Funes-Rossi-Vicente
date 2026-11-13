@@ -52,23 +52,34 @@ class MenuAdministrador(Menu):
                         match seleccion:
                             case 1 | "1" | "uno" | "i" | "listar":
                                 self.categoria_servicio.listar_categoria()
+                                continuar()
+                                limpiado_consola()
                             case 2 | "2" | "dos" | "ii" | "crear":
                                 nombre = input_str(f"{AMARILLO}Escriba el nombre de la categoria: {RESET}", "Nombre")
                                 descripcion = input_str(f"{AMARILLO}Escriba la descripción de la categoria: {RESET}", "Descripción")
                                 res = self.categoria_servicio.crear_categoria(nombre, descripcion)
                                 print(res)
+                                continuar()
+                                limpiado_consola()
                             case 3 | "3" | "tres" | "iii" | "editar":
                                 _id = input_int_id(f"{AMARILLO}Escriba el ID de la categoria que desea buscar: {RESET}","ID")
                                 self.categoria_servicio.editar_categoria(_id, self.pedido_servicio)
+                                continuar()
+                                limpiado_consola()
                             case 4 | "4" | "cuatro" | "iv" | "eliminar":
                                 _id = input_int_id(f"{AMARILLO}Escriba el ID de la categoria que desea buscar: {RESET}","ID")
                                 self.categoria_servicio.eliminar_categoria(_id, self.pedido_servicio)
+                                continuar()
+                                limpiado_consola()
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                                limpiado_consola()
                                 print(f"{ROJO}Regresando...{RESET}")
                                 break
                     except FoodStoreError as e:
+                        limpiado_consola()
                         print(f"{NARANJA}\n[Error de Negocio]: {e}{RESET}")
                     except ValueError as e:
+                        limpiado_consola()
                         print(f"{NARANJA}\n[Error de Formato]: {e}{RESET}")
 
             case "2" | "dos":
@@ -85,6 +96,8 @@ class MenuAdministrador(Menu):
                         match seleccion:
                             case 1 | "1" | "uno" | "i" | "listar":
                                 listar_producto_admin(self.producto_servicio)
+                                continuar()
+                                limpiado_consola()
                             case 2 | "2" | "dos" | "ii" | "crear":
                                 nombre = input_str(f"{AMARILLO}Escriba el nombre del nuevo producto: {RESET}", "Nombre")
                                 precio = input_float(f"{AMARILLO}Escriba el precio del nuevo producto: {RESET}", "Precio")
@@ -94,23 +107,34 @@ class MenuAdministrador(Menu):
                                 disponible = input_bool(f"{AMARILLO}¿El producto esta disponible?: {RESET}")
                                 res = crear_producto(nombre, precio, descripcion, stock, imagen, disponible, self.producto_servicio)
                                 print(res)
+                                continuar()
+                                limpiado_consola()
                             case 3 | "3" | "tres" | "iii" | "editar":
                                 _id = input_int(f"{AMARILLO}Escriba el ID del producto que desea buscar: {RESET}","ID")
                                 editar_producto(_id, self.producto_servicio, self.pedido_servicio)
+                                continuar()
+                                limpiado_consola()
                             case 4 | "4" | "cuatro" | "iv" | "eliminar":
                                 _id = input_int(f"{AMARILLO}Escriba el ID del producto que desea buscar: {RESET}","ID")
                                 eliminar_producto(_id, self.producto_servicio, self.pedido_servicio)
+                                continuar()
+                                limpiado_consola()
                             case 5 | "5" | "cinco" | "v" | "asignar":
                                 _id = input_int(f"{AMARILLO}Escriba el ID del producto que desea buscar: {RESET}", "ID del producto")
                                 asignar_categoria(_id, self.producto_servicio, self.pedido_servicio, self.categoria_servicio)
+                                continuar()
+                                limpiado_consola()
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
+                                limpiado_consola()
                                 print(f"{ROJO}Regresando...{RESET}")
                                 break
                             case _:
                                 print(f"{NARANJA}Ingrese una opcion mostrada en pantalla.{RESET}")
                     except FoodStoreError as e:
+                        limpiado_consola()
                         print(f"{NARANJA}\n[Error de Negocio]: {e}{RESET}")
                     except ValueError as e:
+                        limpiado_consola()
                         print(f"{NARANJA}\n[Error de Formato]: {e}{RESET}")
             case "3" | "tres":
                 while True:
@@ -289,6 +313,7 @@ class MenuAdministrador(Menu):
                             case "1":
                                 pedidos = self.pedido_servicio.listar_pedidos_activos()
                                 if not pedidos:
+                                    limpiado_consola()
                                     print(f"{NARANJA}No hay pedidos registrados.{RESET}")
                                 else:
                                     for p in pedidos:
@@ -297,6 +322,8 @@ class MenuAdministrador(Menu):
                                         for d in p.detalles:
                                             print(f"{AZUL}   - {d.producto.nombre if d.producto else 'Producto Eliminado'} x {d.cantidad} (Subtotal: ${d.subtotal:.2f}){RESET}")
                                         print(f"{AZUL}-{RESET}" * 40)
+                                        continuar()
+                                        limpiado_consola()
                             case "2":
                                 print(f"\n{AZUL}--- CREAR PEDIDO ---{RESET}")
                                 id_usu = input_int_id(f"{AMARILLO}Ingrese el ID del usuario cliente: {RESET}", "ID Usuario")
@@ -325,7 +352,8 @@ class MenuAdministrador(Menu):
                                             break
                                     
                                     if not prod_encontrado:
-                                        print(f"{AZUL}Producto no encontrado.{RESET}")
+                                        limpiado_consola()
+                                        print(f"{NARANJA}Producto no encontrado.{RESET}")
                                         continue
                                     
                                     cant = input_int(f"{AMARILLO}Ingrese la cantidad para '{prod_encontrado.nombre}': {RESET}", "Cantidad")
@@ -334,8 +362,11 @@ class MenuAdministrador(Menu):
                                 if items:
                                     nuevo_ped = self.pedido_servicio.crear_pedido(usu, forma_pago, items)
                                     print(f"{AZUL}¡Pedido creado con éxito! ID: {MORADO}{nuevo_ped.id}{AZUL} | Total: {MORADO}${nuevo_ped.total:.2f}{RESET}")
+                                    continuar()
+                                    limpiado_consola()
                                 else:
-                                    print(f"{AZUL}No se agregaron items, pedido cancelado.")
+                                    limpiado_consola()
+                                    print(f"{NARANJA}No se agregaron items, pedido cancelado.")
                             case "3":
                                 id_ped = input_int_id(f"{AMARILLO}Ingrese el ID del pedido a actualizar: {RESET}", "ID Pedido")
                                 print(f"\n{AZUL}Nuevos estados:{RESET}")
@@ -346,22 +377,31 @@ class MenuAdministrador(Menu):
                                                 Estado.TERMINADO if op_est == 3 else Estado.CANCELADO)
                                 self.pedido_servicio.cambiar_estado(id_ped, nuevo_estado)
                                 print(f"{AZUL}¡Estado del pedido actualizado con éxito!{RESET}")
+                                continuar()
+                                limpiado_consola()
                             case "4":
                                 id_ped = input_int(f"{AMARILLO}Ingrese el ID del pedido a eliminar: {RESET}", "ID Pedido")
                                 if input(f"{AMARILLO}¿Confirma la baja lógica del pedido? (S/N): {RESET}").strip().lower() == "s":
                                     self.pedido_servicio.eliminar_pedido(id_ped)
                                     print(f"{AZUL}Pedido eliminado correctamente.{RESET}")
+                                    continuar()
+                                    limpiado_consola()
                             case "0":
+                                limpiado_consola()
+                                print(f"{ROJO}Regresando...{RESET}")
                                 break
                     except FoodStoreError as e:
+                        limpiado_consola()
                         print(f"\n{NARANJA}[Error de Negocio]: {e}{RESET}")
                     except ValueError as e:
+                        limpiado_consola()
                         print(f"\n{NARANJA}[Error de Formato]: {e}{RESET}")
 
             case "9":
                 return False
 
             case _:
+                limpiado_consola()
                 print(f"{NARANJA}Opción no válida.{RESET}")
                 return True
         return True
@@ -393,10 +433,12 @@ class MenuCliente(Menu):
 
                 case "1" | "uno":
                     self.categoria_servicio.listar_categoria()
-
+                    continuar()
+                    limpiado_consola()
                 case "2" | "dos":
                     listar_producto_cliente(self.producto_servicio)
-
+                    continuar()
+                    limpiado_consola()
                 case "3":
                     while True:
                         print(f"\n{AZUL}--- MIS PEDIDOS ({MORADO}{self.usuario.nombre}{AZUL}) ---{RESET}")
@@ -421,25 +463,32 @@ class MenuCliente(Menu):
                                     prod_precio = d.producto.precio if d.producto else 0.0
                                     print(f"{AZUL} - {MORADO}{prod_nombre}{AZUL}: {MORADO}{d.cantidad}{AZUL} un. x {MORADO}${prod_precio}{AZUL} = {MORADO}${d.subtotal:.2f}{RESET}")
                                 print(f"{AZUL}TOTAL: {MORADO}${p.total:.2f}{RESET}")
+                                continuar()
+                                limpiado_consola()
                         if not encontrado:
+                            limpiado_consola()
                             print(f"{NARANJA}El ID ingresado no corresponde a ninguno de tus pedidos.{RESET}")
 
-                case "4":
+                case "4":                    
                     print(f"\n{AZUL}--- MIS DATOS ---{RESET}")
                     print(f"{AZUL}Nombre: {MORADO}{self.usuario.nombre} {self.usuario.apellido}{RESET}")
                     print(f"{AZUL}Mail: {MORADO}{self.usuario.mail}{RESET}")
                     print(f"{AZUL}Celular: {MORADO}{self.usuario.celular}{RESET}")
                     print(f"{AZUL}Rol: {MORADO}{self.usuario.rol.name}{RESET}")
-
+                    continuar()
+                    limpiado_consola()
                 case "9":
+                    limpiado_consola()
                     print(f"{ROJO}Cerrando sesión de cliente...{RESET}")
                     return False
-
                 case _:
+                    limpiado_consola()
                     print(f"{NARANJA}Opción no válida.{RESET}")
         except FoodStoreError as e:
+            limpiado_consola()
             print(f"\n{NARANJA}[Error de Negocio]: {e}{RESET}")
         except ValueError as e:
+            limpiado_consola()
             print(f"\n{NARANJA}[Error de Formato]: {e}{RESET}")
 
         return True
