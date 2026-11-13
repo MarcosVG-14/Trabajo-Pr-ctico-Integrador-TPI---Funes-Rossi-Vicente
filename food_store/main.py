@@ -7,6 +7,7 @@ from servicios.productoservicio import Productoservicio
 from servicios.pedido_servicio import PedidoServicio
 from excepciones.excepciones import CredencialesInvalidasError
 from consola.menu import crear_menu
+from consola.estetica import *
 
 def inicializar_datos(usuario_servicio: UsuarioServicio) -> None:
     """Carga los usuarios iniciales requeridos en memoria."""
@@ -40,24 +41,24 @@ def main() -> None:
     ejecutando_sistema = True
 
     while ejecutando_sistema:
-        print("\n=== FOOD STORE INICIO DE SESIÓN ===")
+        print(f"\n{AZUL}=== FOOD STORE INICIO DE SESIÓN ==={RESET}")
         intentos = 0
         sesion_activa: Usuario | None = None
         
         while intentos < 3:
-            mail = input("Mail: ").strip()
-            contrasenia = getpass.getpass("Contraseña: ")
+            mail = input(f"{AMARILLO}Mail: {RESET}").strip()
+            contrasenia = getpass.getpass(f"{AMARILLO}Contraseña: {RESET}")
             
             try:
                 sesion_activa = usuario_servicio.autenticar(mail, contrasenia)
-                print(f"\n¡Bienvenido/a, {sesion_activa.nombre} {sesion_activa.apellido} [{sesion_activa.rol.name}]!")
+                print(f"\n{AZUL}¡Bienvenido/a, {MORADO}{sesion_activa.nombre} {sesion_activa.apellido} {AZUL}[{MORADO}{sesion_activa.rol.name}{AZUL}]!{RESET}")
                 break
             except CredencialesInvalidasError as e:
                 intentos += 1
-                print(f"Error: {e}. Intentos restantes: {3 - intentos}")
+                print(f"{NARANJA}Error: {e}. Intentos restantes: {3 - intentos}{RESET}")
         
         if sesion_activa is None:
-            print("\nHas superado el número máximo de intentos. El programa finalizará.")
+            print(f"\n{AZUL}Has superado el número máximo de intentos. El programa finalizará.{RESET}")
             ejecutando_sistema = False
             break
         
@@ -67,13 +68,13 @@ def main() -> None:
         while mantiene_sesion:
             resultado = menu.mostrar()
             if resultado == "salir":
-                opcion_salida = input("¿Está seguro de que desea salir del programa? (S/N): ").strip().lower()
+                opcion_salida = input(f"{AMARILLO}¿Está seguro de que desea salir del programa? (S/N): {RESET}").strip().lower()
                 if opcion_salida == "s":
-                    print("¡Gracias por utilizar Food Store! Hasta luego.")
+                    print(f"{AZUL}¡Gracias por utilizar Food Store! Hasta luego.{RESET}")
                     ejecutando_sistema = False
                     break
             if resultado is False:
-                print("Cerrando sesión...")
+                print(f"{ROJO}Cerrando sesión...")
                 break
 
 if __name__ == "__main__":
