@@ -158,7 +158,7 @@ class MenuAdministrador(Menu):
                                 editando = True
                                 while editando:
                                     print(f"""{CYAN}- Usted accedió al Usuario de ID {_id}{RESET}
-- {usuario_a_editar.nombre} {usuario_a_editar.apellido}
+{AZUL}- {MORADO}{usuario_a_editar.nombre} {usuario_a_editar.apellido}{RESET}
 {AZUL}¿Qué valor le gustaría actualizar?{RESET}
 
 {VERDE}1.{AZUL} Nombre{RESET}
@@ -347,22 +347,22 @@ class MenuAdministrador(Menu):
                                 self.pedido_servicio.cambiar_estado(id_ped, nuevo_estado)
                                 print(f"{AZUL}¡Estado del pedido actualizado con éxito!{RESET}")
                             case "4":
-                                id_ped = input_int("Ingrese el ID del pedido a eliminar: ", "ID Pedido")
-                                if input("¿Confirma la baja lógica del pedido? (S/N): ").strip().lower() == "s":
+                                id_ped = input_int(f"{AMARILLO}Ingrese el ID del pedido a eliminar: {RESET}", "ID Pedido")
+                                if input(f"{AMARILLO}¿Confirma la baja lógica del pedido? (S/N): {RESET}").strip().lower() == "s":
                                     self.pedido_servicio.eliminar_pedido(id_ped)
-                                    print("Pedido eliminado correctamente.")
+                                    print(f"{AZUL}Pedido eliminado correctamente.{RESET}")
                             case "0":
                                 break
                     except FoodStoreError as e:
-                        print(f"\n[Error de Negocio]: {e}")
+                        print(f"\n{NARANJA}[Error de Negocio]: {e}{RESET}")
                     except ValueError as e:
-                        print(f"\n[Error de Formato]: {e}")
+                        print(f"\n{NARANJA}[Error de Formato]: {e}{RESET}")
 
             case "9":
                 return False
 
             case _:
-                print("Opción no válida.")
+                print(f"{NARANJA}Opción no válida.{RESET}")
                 return True
         return True
 
@@ -376,7 +376,7 @@ class MenuCliente(Menu):
         self.pedido_servicio = pedido_servicio
 
     def mostrar(self) -> bool:
-        print(f"\n=== FOOD STORE CLIENTE ({self.usuario.nombre} {self.usuario.apellido}) ===")
+        print(f"\n{AZUL}=== FOOD STORE CLIENTE ({MORADO}{self.usuario.nombre} {self.usuario.apellido}{AZUL}) ==={RESET}")
         print(f"{VERDE}1.{AZUL} Ver categorías{RESET}")
         print(f"{VERDE}2.{AZUL} Ver productos disponibles{RESET}")
         print(f"{VERDE}3.{AZUL} Mis pedidos{RESET}")
@@ -384,7 +384,7 @@ class MenuCliente(Menu):
         print(f"{VERDE}9.{AZUL} Cerrar sesión{RESET}")
         print(f"{ROJO}0.{AZUL} Salir{RESET}")
         
-        opcion = input("Seleccione una opción: ").strip()
+        opcion = input(f"{AMARILLO}Seleccione una opción: {RESET}").strip()
         
         try:
             match opcion:
@@ -399,15 +399,15 @@ class MenuCliente(Menu):
 
                 case "3":
                     while True:
-                        print(f"\n--- MIS PEDIDOS ({self.usuario.nombre}) ---")
+                        print(f"\n{AZUL}--- MIS PEDIDOS ({MORADO}{self.usuario.nombre}{AZUL}) ---{RESET}")
                         mis_pedidos = self.pedido_servicio.listar_pedidos_por_usuario(self.usuario)
                         if not mis_pedidos:
-                            print("No tenés pedidos registrados.")
+                            print(f"{NARANJA}No tenés pedidos registrados.{RESET}")
                             break
                         for p in mis_pedidos:
-                            print(f"ID: {p.id} | Fecha: {p.fecha} | Estado: {p.estado.name} | Pago: {p.forma_pago.name} | Total: ${p.total:.2f}")
+                            print(f"{AZUL}ID: {MORADO}{p.id}{AZUL} | Fecha: {MORADO}{p.fecha}{AZUL} | Estado: {MORADO}{p.estado.name}{AZUL} | Pago: {MORADO}{p.forma_pago.name}{AZUL} | Total: {MORADO}${p.total:.2f}{RESET}")
                         
-                        id_elegido = input_int("Ingrese el ID de un pedido para ver sus detalles (0 para volver): ", "ID")
+                        id_elegido = input_int(f"{AMARILLO}Ingrese el ID de un pedido para ver sus detalles (0 para volver): {RESET}", "ID")
                         if id_elegido == 0:
                             break
                         
@@ -415,32 +415,32 @@ class MenuCliente(Menu):
                         for p in mis_pedidos:
                             if p.id == id_elegido:
                                 encontrado = True
-                                print(f"\nDetalles del Pedido #{p.id}:")
+                                print(f"\n{AZUL}Detalles del Pedido #{MORADO}{p.id}:{RESET}")
                                 for d in p.detalles:
                                     prod_nombre = d.producto.nombre if d.producto else "Producto eliminado"
                                     prod_precio = d.producto.precio if d.producto else 0.0
-                                    print(f" - {prod_nombre}: {d.cantidad} un. x ${prod_precio} = ${d.subtotal:.2f}")
-                                print(f"TOTAL: ${p.total:.2f}")
+                                    print(f"{AZUL} - {MORADO}{prod_nombre}{AZUL}: {MORADO}{d.cantidad}{AZUL} un. x {MORADO}${prod_precio}{AZUL} = {MORADO}${d.subtotal:.2f}{RESET}")
+                                print(f"{AZUL}TOTAL: {MORADO}${p.total:.2f}{RESET}")
                         if not encontrado:
-                            print("El ID ingresado no corresponde a ninguno de tus pedidos.")
+                            print(f"{NARANJA}El ID ingresado no corresponde a ninguno de tus pedidos.{RESET}")
 
                 case "4":
-                    print(f"\n--- MIS DATOS ---")
-                    print(f"Nombre: {self.usuario.nombre} {self.usuario.apellido}")
-                    print(f"Mail: {self.usuario.mail}")
-                    print(f"Celular: {self.usuario.celular}")
-                    print(f"Rol: {self.usuario.rol.name}")
+                    print(f"\n{AZUL}--- MIS DATOS ---{RESET}")
+                    print(f"{AZUL}Nombre: {MORADO}{self.usuario.nombre} {self.usuario.apellido}{RESET}")
+                    print(f"{AZUL}Mail: {MORADO}{self.usuario.mail}{RESET}")
+                    print(f"{AZUL}Celular: {MORADO}{self.usuario.celular}{RESET}")
+                    print(f"{AZUL}Rol: {MORADO}{self.usuario.rol.name}{RESET}")
 
                 case "9":
-                    print("Cerrando sesión de cliente...")
+                    print(f"{ROJO}Cerrando sesión de cliente...{RESET}")
                     return False
 
                 case _:
-                    print("Opción no válida.")
+                    print(f"{NARANJA}Opción no válida.{RESET}")
         except FoodStoreError as e:
-            print(f"\n[Error de Negocio]: {e}")
+            print(f"\n{NARANJA}[Error de Negocio]: {e}{RESET}")
         except ValueError as e:
-            print(f"\n[Error de Formato]: {e}")
+            print(f"\n{NARANJA}[Error de Formato]: {e}{RESET}")
 
         return True
 
