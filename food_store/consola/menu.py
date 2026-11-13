@@ -17,7 +17,6 @@ class Menu(ABC):
     def mostrar(self) -> bool:
         pass
 
-
 class MenuAdministrador(Menu):
     def __init__(self, usuario: Usuario, categoria_servicio, producto_servicio, usuario_servicio, pedido_servicio) -> None:
         super().__init__(usuario)
@@ -113,7 +112,6 @@ class MenuAdministrador(Menu):
                         print(f"\n[Error de Negocio]: {e}")
                     except ValueError as e:
                         print(f"\n[Error de Formato]: {e}")
-
             case "3" | "tres":
                 while True:
                     print(f"""--- USUARIOS ---
@@ -143,7 +141,6 @@ Rol: {usuario.rol.name}
 -------------------------""")
                                     continuar()
                                     limpiado_consola()
-
                             case "2" | "dos" | "ii" | "crear":
                                 nombre = input_str("Ingrese el nombre: ", "Nombre").strip()
                                 apellido = input_str("Ingrese el apellido: ", "Apellido").strip()
@@ -155,11 +152,9 @@ Rol: {usuario.rol.name}
                                 print("Usuario creado exitosamente.")
                                 continuar()
                                 limpiado_consola()
-
                             case "3" | "tres" | "iii" | "editar":
                                 _id = input_int("Escriba el ID del usuario que desea buscar: ", "ID")
                                 usuario_a_editar = self.usuario_servicio.buscar_por_id(_id)
-                                
                                 editando = True
                                 while editando:
                                     print(f"""{CYAN}- Usted accedió al Usuario de ID {_id}{RESET}
@@ -176,11 +171,9 @@ Rol: {usuario.rol.name}
 
 Seleccione una opción: """, end="")
                                     opcion_editar = input().strip()
-
                                     if opcion_editar == "8":
                                         editando = False
                                         break
-
                                     match opcion_editar:
                                         case "1" | "uno" | "i" | "nombre":
                                             nuevo_nombre = input_str("Ingrese el nuevo nombre: ", "Nombre")
@@ -192,7 +185,6 @@ Seleccione una opción: """, end="")
                                                 print("Acción cancelada.")
                                             continuar()
                                             limpiado_consola()
-
                                         case "2" | "dos" | "ii" | "apellido":
                                             nuevo_apellido = input_str("Ingrese el nuevo apellido: ", "Apellido")
                                             confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
@@ -203,7 +195,6 @@ Seleccione una opción: """, end="")
                                                 print("Acción cancelada.")
                                             continuar()
                                             limpiado_consola()
-
                                         case "3" | "tres" | "iii" | "mail":
                                             nuevo_mail = input_str("Ingrese el nuevo mail: ", "Mail")
                                             confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
@@ -217,7 +208,6 @@ Seleccione una opción: """, end="")
                                                 print("Acción cancelada.")
                                             continuar()
                                             limpiado_consola()
-
                                         case "4" | "cuatro" | "iv" | "celular":
                                             nuevo_celular = input_str("Ingrese el nuevo celular: ", "Celular")
                                             confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
@@ -228,7 +218,6 @@ Seleccione una opción: """, end="")
                                                 print("Acción cancelada.")
                                             continuar()
                                             limpiado_consola()
-
                                         case "5" | "cinco" | "v" | "contraseña":
                                             nueva_contrasenia = input_str("Ingrese la nueva contraseña: ", "Contraseña")
                                             confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
@@ -239,7 +228,6 @@ Seleccione una opción: """, end="")
                                                 print("Acción cancelada.")
                                             continuar()
                                             limpiado_consola()
-
                                         case "6" | "seis" | "vi" | "rol":
                                             nuevo_rol = input_int("Ingrese el nuevo rol (1 = Admin | 2 = Usuario): ", "Rol")
                                             confirmacion = input(f"{AMARILLO}¿Estás seguro de hacer este cambio? (SI/NO):{RESET} ").strip()
@@ -250,18 +238,15 @@ Seleccione una opción: """, end="")
                                                 print("Acción cancelada.")
                                             continuar()
                                             limpiado_consola()
-
                                         case _:
                                             print("Error... Comando incorrecto")
                                             continuar()
                                             limpiado_consola()
-
                             case "4" | "cuatro" | "iv" | "eliminar":
                                 _id = input_int("Escriba el ID del usuario: ", "ID")
                                 usuario_a_borrar = self.usuario_servicio.buscar_por_id(_id)
                                 if usuario_a_borrar.id == self.usuario.id:
                                     raise OperacionNoPermitidaError("No puedes borrarte a tí mismo.")
-                                
                                 confirmacion = input(f"{ROJO}¿Dar baja lógica a {usuario_a_borrar.nombre}? (S/N):{RESET} ").strip().lower()
                                 if confirmacion in ["si", "s"]:
                                     self.usuario_servicio.eliminar_usuario(_id)
@@ -270,7 +255,6 @@ Seleccione una opción: """, end="")
                                     print(f"Usuario {_id} no ha sido eliminado.")
                                 continuar()
                                 limpiado_consola()
-
                             case "5" | "cinco" | "v" | "datos":
                                 print(f"""Id: {self.usuario.id}
 Nombre: {self.usuario.nombre}
@@ -280,7 +264,6 @@ Rol: {self.usuario.rol.name}
 -------------------------""")
                                 continuar()
                                 limpiado_consola()
-
                             case 0 | "0" | "cero" | "o" | "zero" | "volver":
                                 print("Volviendo...")
                                 break
