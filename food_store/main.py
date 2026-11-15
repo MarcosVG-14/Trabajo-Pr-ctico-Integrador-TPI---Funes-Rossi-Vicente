@@ -41,24 +41,24 @@ def main() -> None:
     ejecutando_sistema = True
 
     while ejecutando_sistema:
-        print(f"\n{AZUL}=== FOOD STORE INICIO DE SESIÓN ==={RESET}")
+        print(f"\n{AZUL}=== FOOD STORE INICIO DE SESIÓN ==={BLANCO}")
         intentos = 0
         sesion_activa: Usuario | None = None
         
         while intentos < 3:
-            mail = input(f"{AMARILLO}Mail: {RESET}").strip()
-            contrasenia = getpass.getpass(f"{AMARILLO}Contraseña: {RESET}")
+            mail = input(f"{AMARILLO}Mail: {BLANCO}").strip()
+            contrasenia = getpass.getpass(f"{AMARILLO}Contraseña: {BLANCO}")
             
             try:
                 sesion_activa = usuario_servicio.autenticar(mail, contrasenia)
-                print(f"\n{AZUL}¡Bienvenido/a, {MORADO}{sesion_activa.nombre} {sesion_activa.apellido} {AZUL}[{MORADO}{sesion_activa.rol.name}{AZUL}]!{RESET}")
+                print(f"\n{AZUL}¡Bienvenido/a, {MORADO}{sesion_activa.nombre} {sesion_activa.apellido} {AZUL}[{MORADO}{sesion_activa.rol.name}{AZUL}]!{BLANCO}")
                 break
             except CredencialesInvalidasError as e:
                 intentos += 1
-                print(f"{NARANJA}Error: {e}. Intentos restantes: {3 - intentos}{RESET}")
+                print(f"{NARANJA}Error: {e}. Intentos restantes: {3 - intentos}{BLANCO}")
         
         if sesion_activa is None:
-            print(f"\n{AZUL}Has superado el número máximo de intentos. El programa finalizará.{RESET}")
+            print(f"\n{AZUL}Has superado el número máximo de intentos. El programa finalizará.{BLANCO}")
             ejecutando_sistema = False
             break
         
@@ -68,9 +68,9 @@ def main() -> None:
         while mantiene_sesion:
             resultado = menu.mostrar()
             if resultado == "salir":
-                opcion_salida = input(f"{AMARILLO}¿Está seguro de que desea salir del programa? (S/N): {RESET}").strip().lower()
+                opcion_salida = input(f"{AMARILLO}¿Está seguro de que desea salir del programa? (S/N): {BLANCO}").strip().lower()
                 if opcion_salida == "s":
-                    print(f"{AZUL}¡Gracias por utilizar Food Store! Hasta luego.{RESET}")
+                    print(f"{AZUL}¡Gracias por utilizar Food Store! Hasta luego.{BLANCO}")
                     ejecutando_sistema = False
                     break
             if resultado is False:
