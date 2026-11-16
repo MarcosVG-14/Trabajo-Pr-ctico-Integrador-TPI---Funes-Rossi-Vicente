@@ -120,7 +120,7 @@ def listar_producto_admin(productoservicio):
                         else:
                             print(f"{AZUL}ID: {MORADO}{i.id}{AZUL} | {MORADO}{i.nombre}{AZUL}: {MORADO}${i.precio}{AZUL} | Stock: {MORADO}{i.stock}{AZUL} | Sin categoria.{BLANCO}")
                 if not encontrado:
-                    raise EntidadNoEncontradaError("No hay categorias cargadas.")
+                    raise EntidadNoEncontradaError("No hay productos cargados.")
                 if encontrado:
                     break
             case _:
@@ -152,7 +152,7 @@ def listar_producto_cliente(productoservicio):
                         else:
                             print(f"{AZUL}ID: {MORADO}{i.id}{AZUL} | {MORADO}{i.nombre}{AZUL}: {MORADO}${i.precio}{AZUL} | Stock: {MORADO}{i.stock}{AZUL} | Sin categoria.{BLANCO}")
                 if not encontrado:
-                    raise EntidadNoEncontradaError("No hay categorias cargadas.")
+                    raise EntidadNoEncontradaError("No hay productos cargados.")
                 if encontrado:
                     break
             case _:
