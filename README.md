@@ -53,7 +53,7 @@ El sistema ofrece un sistema de inicio de sesión con control de roles y dos men
 6. **Salir:** Cierra la aplicación por completo.
 
 # Video de presentación y explicación del TPI
-* https://youtu.be/eqa0Q_Q-uOc*
+* https://youtu.be/eqa0Q_Q-uOc
 
 # Repositorio en GitHub
 * https://github.com/MarcosVG-14/Trabajo-Pr-ctico-Integrador-TPI---Funes-Rossi-Vicente
