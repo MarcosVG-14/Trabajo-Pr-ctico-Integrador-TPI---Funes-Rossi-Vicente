@@ -54,3 +54,11 @@ El sistema ofrece un sistema de inicio de sesión con control de roles y dos men
 
 # Video de presentación y explicación del TPI
 * https://youtu.be/eqa0Q_Q-uOc*
+
+# Repositorio en GitHub
+* https://github.com/MarcosVG-14/Trabajo-Pr-ctico-Integrador-TPI---Funes-Rossi-Vicente
+
+# Integrantes 
+* Funes, Pablo Sebastián
+* Rossi, Valentino
+* Vicente Gallonetto, Marcos
